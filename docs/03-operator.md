@@ -1,4 +1,4 @@
-## JavaScript arithmetic operator:
+## **JavaScript arithmetic operator:**
 
 | Operator | Name                   | Example         | Result |
 |----------|------------------------|----------------|--------|
@@ -12,7 +12,7 @@
 | `--`     | Decrement              | `let b = 7; b--` | `6`  |
 
 
-## JavaScript Bitwise Operators:
+## **JavaScript Bitwise Operators:**
 
 | Operator | Name                      | Example       | Result (Binary) | Result (Decimal) |
 |----------|---------------------------|--------------|----------------|----------------|
@@ -34,7 +34,7 @@
 - **Zero-fill Right Shift (`>>>`)**: Shifts bits right, always filling 0s (does not preserve sign).
 
 
-### **Comparison Operators**  
+## **JavaScript Comparison Operators:**  
 
 | Operator | Name                         | Example (`a = 5, b = "5"`) | Result |
 |----------|------------------------------|---------------------------|--------|
@@ -48,20 +48,127 @@
 | `<=`     | Less than or equal to        | `a <= 4`                   | `false` |
 
 
-## Logical Operators
+## **JavaScript Special Operators** 🚀
 
-| Operator | Name               | Example (`x = true, y = false`) | Result  |
-|----------|--------------------|-------------------------------|---------|
-| `&&`     | Logical AND        | `x && y`                      | `false` |
-| `\|\|`   | Logical OR         | `x \|\| y`                    | `true`  |
-| `!`      | Logical NOT        | `!x`                          | `false` |
+JavaScript provides several **special operators** that go beyond basic arithmetic and logical operations. These operators enhance functionality and make code more concise.
 
+---
 
-## Special JavaScript Operators
+### **1. Ternary Operator (`? :`)**
+- A shorthand for `if...else` statements.
+- **Syntax:**  
+  ```js
+  condition ? expressionIfTrue : expressionIfFalse;
+  ```
+- **Example:**
+  ```js
+  let age = 18;
+  let message = (age >= 18) ? "You can vote!" : "You cannot vote.";
+  console.log(message); // Output: You can vote!
+  ```
 
-| Operator | Name                           | Example | Explanation |
-|----------|--------------------------------|---------|-------------|
-| `??`     | Nullish Coalescing Operator   | `null ?? "default"` → `"default"` | Returns right-hand value if left-hand is `null` or `undefined` (not `false` or `0`). |
-| `?.`     | Optional Chaining (Null Check)            | `obj?.prop?.nestedProp` | Prevents errors when accessing deep properties in possibly `null` or `undefined` objects. |
+---
 
+### **2. Spread Operator (`...`)**
+- Expands (spreads) elements of an array or properties of an object.
+- **Example with Arrays:**
+  ```js
+  let arr1 = [1, 2, 3];
+  let arr2 = [...arr1, 4, 5, 6]; // Combines arrays
+  console.log(arr2); // Output: [1, 2, 3, 4, 5, 6]
+  ```
+- **Example with Objects:**
+  ```js
+  let obj1 = { name: "Alice" };
+  let obj2 = { ...obj1, age: 25 };
+  console.log(obj2); // Output: { name: "Alice", age: 25 }
+  ```
+
+---
+
+### **3. Rest Operator (`...`)**
+- Collects multiple elements into an array.
+- **Example:**
+  ```js
+  function sum(...numbers) {
+    return numbers.reduce((acc, num) => acc + num, 0);
+  }
+  console.log(sum(1, 2, 3, 4)); // Output: 10
+  ```
+
+---
+
+### **4. Nullish Coalescing Operator (`??`)**
+- Returns the right-hand operand if the left-hand operand is `null` or `undefined`.
+- **Example:**
+  ```js
+  let user = null;
+  let username = user ?? "Guest";
+  console.log(username); // Output: Guest
+  ```
+
+---
+
+### **5. Optional Chaining Operator (`?.`)**
+- Prevents errors when accessing nested properties that may not exist.
+- **Example:**
+  ```js
+  let person = { name: "Alice", address: { city: "New York" } };
+  console.log(person.address?.city); // Output: New York
+  console.log(person.contact?.phone); // Output: undefined (no error)
+  ```
+
+---
+
+### **6. Comma Operator (`,`)**
+- Evaluates multiple expressions and returns the last one.
+- **Example:**
+  ```js
+  let a = (1, 2, 3);
+  console.log(a); // Output: 3
+  ```
+
+---
+
+### **7. `typeof` Operator**
+- Returns the type of a variable.
+- **Example:**
+  ```js
+  console.log(typeof 42); // Output: "number"
+  console.log(typeof "Hello"); // Output: "string"
+  console.log(typeof undefined); // Output: "undefined"
+  ```
+
+---
+
+### **8. `instanceof` Operator**
+- Checks if an object is an instance of a specific class.
+- **Example:**
+  ```js
+  class Car {}
+  let myCar = new Car();
+  console.log(myCar instanceof Car); // Output: true
+  ```
+
+---
+
+### **9. `in` Operator**
+- Checks if a property exists in an object.
+- **Example:**
+  ```js
+  let obj = { name: "Alice", age: 25 };
+  console.log("name" in obj); // Output: true
+  console.log("gender" in obj); // Output: false
+  ```
+
+---
+
+### **10. `delete` Operator**
+- Removes a property from an object.
+- **Example:**
+  ```js
+  let obj = { name: "Alice", age: 25 };
+  delete obj.age;
+  console.log(obj); // Output: { name: "Alice" }
+  ```
 

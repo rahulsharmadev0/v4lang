@@ -1,4 +1,4 @@
-# **Functions**
+# **Functions** 🔥
 
 Functions are reusable blocks of code that perform a specific task.
 - **Purpose:**  
@@ -58,7 +58,7 @@ fact = null;
 console.log(newfact(5)); // ❌ TypeError: fact is not a function
 ```
 ---
-# **Arguments & Parameters**
+## **Arguments & Parameters**
 
 **Arguments:**
 Arguments are values passed to a function when it is called.\
@@ -93,13 +93,13 @@ Parameters allow you to initialize function parameters
 
 ---
 
-# Higher-Order Functions
+## **Higher-Order Functions** ⚡
 
 Higher-order functions are functions that take other functions as arguments or return functions as their result.
 
 > Higher-order functions leverage closures to "remember" information even after the outer function has finished executing.
 > 
-### **Example:**
+**Example:**
 ```js
 function higherOrderFunction(callback) {
     return callback();
@@ -123,15 +123,15 @@ higherOrderFunction(sayHello); // returns "Hello!"
 
 ---
 
-# **Scoping hierarchy**
+## **Scoping hierarchy** 👀
 
 
-## **1. Global Scope**
+### **1. Global Scope**
 - Variables declared **outside** any function are in the **global scope**.
 - These variables can be accessed **inside any function**.
 - They remain in memory as long as the program runs.
 
-### **Example:**
+**Example:**
 ```javascript
 let globalVar = "I am global"; // Global scope
 
@@ -146,11 +146,11 @@ console.log(globalVar); // ✅ Accessible outside function
 
 ---
 
-## **2. Local (Function) Scope**
+### **2. Local (Function) Scope**
 - Variables declared **inside** a function are **only accessible within that function**.
 - They are **created** when the function is called and **destroyed** when it ends.
 
-### **Example:**
+**Example:**
 ```javascript
 function showLocal() {
   let localVar = "I am local"; // Function (Local) scope
@@ -164,11 +164,11 @@ console.log(localVar); // ❌ Error: localVar is not defined
 
 ---
 
-## **3. Lexical Scope**
+### **3. Lexical Scope**
 - **Functions in JavaScript remember the scope in which they were defined.**
 - **An inner function** can access variables from its outer function **even after the outer function has finished executing**.
 
-### **Example:**
+**Example:**
 ```javascript
 function outerFunction() {
   let outerVar = "I am from outer scope";
@@ -187,7 +187,7 @@ myFunction(); // Output: I am from outer scope
 
 ---
 
-## **Comparison Table**
+### **Comparison Table**
 | Feature          | Global Scope | Local (Function) Scope | Lexical Scope |
 |-----------------|--------------|----------------------|--------------|
 | **Definition**   | Variables accessible everywhere. | Variables restricted to their function. | Inner functions remember outer variables. |
@@ -196,3 +196,89 @@ myFunction(); // Output: I am from outer scope
 | **Example**      | `let x = 10;` (outside functions) | `let y = 20;` (inside a function) | Nested functions using outer variables. |
 
 > 🚀 **Tip:** Always **prefer local scope** over global scope to avoid variable conflicts!
+
+---
+
+## **Closures in JavaScript** 🗺️  
+
+A **closure** is a function that **remembers the variables from its outer scope**, even after the outer function has finished executing.  
+
+### **📌 Key Points About Closures**
+1. A closure is created **when a function is defined inside another function**.
+2. The **inner function retains access** to the outer function's variables.
+3. The outer function’s execution may complete, but the inner function still remembers and can access its variables.
+
+---
+
+### **Example 1: Basic Closure**
+```javascript
+function outerFunction() {
+  let outerVar = "I am from outer scope";
+
+  function innerFunction() {
+    console.log(outerVar); // ✅ Can access outerVar due to closure
+  }
+
+  return innerFunction;
+}
+
+const myClosure = outerFunction(); // `outerFunction` runs and returns `innerFunction`
+myClosure(); // Output: I am from outer scope
+```
+> 🔹 **Why?**  
+>- Even though `outerFunction()` has finished executing, `myClosure()` still has access to `outerVar` because **closures remember the scope where they were created**.
+
+---
+
+### **Example 2: Closure with Private Variables (Data Encapsulation)**
+Closures are useful for **hiding variables** from the global scope.
+
+```javascript
+function counter() {
+  let count = 0; // Private variable
+
+  return function () {
+    count++; // `count` is remembered by closure
+    console.log(count);
+  };
+}
+
+const increment = counter(); // `increment` is a closure
+increment(); // Output: 1
+increment(); // Output: 2
+increment(); // Output: 3
+```
+> 🔹 **Why?**  
+> - `count` **is not accessible directly**, but the closure remembers it.
+> - Every time `increment()` is called, it **modifies the private `count` variable**.
+
+---
+
+### **Example 3: Closures in Loops (Fixing the `var` Issue)**
+```javascript
+for (var i = 1; i <= 3; i++) {
+  setTimeout(function() {
+    console.log(i);
+  }, 1000);
+}
+
+// Output: 4, 4, 4 (because `var` is function-scoped)
+```
+🔹 **Fix with Closure using `let`:**
+```javascript
+for (let i = 1; i <= 3; i++) {
+  setTimeout(function() {
+    console.log(i);
+  }, 1000);
+}
+
+// Output: 1, 2, 3 (because `let` is block-scoped)
+```
+
+---
+
+## **🔹 When to Use Closures?**
+✅ Data privacy (e.g., **hiding variables**)  
+✅ Maintaining **state** between function calls  
+✅ **Callbacks & Event handlers**  
+✅ Creating **factory functions**  
