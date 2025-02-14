@@ -1,3 +1,8 @@
+// numbers aren’t “real” numbers. They’re floating-point
+// numbers based on the IEEE 754 standard.
+console.log(0.1 + 0.2 === 0.3); // false
+console.log(0.1 + 0.2); // 0.30000000000000004
+
 /* -----------------------------------------------
    Object Immutability [Medium]
 -------------------------------------------------*/
