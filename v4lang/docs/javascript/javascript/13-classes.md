@@ -1,4 +1,4 @@
-# **Classes**
+# Classes
 
 Classes are a template for creating objects. They encapsulate data with code to work on that data.
 
@@ -174,7 +174,7 @@ obj.greet(); // Output: Hello from Parent!
 
 ---
 
-### **Types of Inheritance in JavaScript**
+## **Types of Inheritance in JavaScript**
 
 1. **Single Inheritance** – A class inherits from one parent.
 2. **Multilevel Inheritance** – A class inherits from another child class.

@@ -6,9 +6,9 @@ const config: Config = {
   title: "v4lang",
   tagline: "Dinosaurs are cool",
   favicon: "img/favicon.ico",
-
+  
   // Set the production url of your site here
-  url: "https://github.com/rahulsharmadev0/v4lang",
+  url: "https://github.com",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/",
@@ -19,9 +19,6 @@ const config: Config = {
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
 
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
@@ -60,22 +57,19 @@ const config: Config = {
           sidebarId: "javascriptSidebar",
           position: "left",
           label: "📜 JavaScript ",
-          to: "/docs/javaScript/intro",
+          to: "/docs/category/javascript",
           items: [
             {
               label: "JavaScript",
-              // sidebarId: "javascript_sidebarId",
-              to: "/docs/javaScript/javaScript/intro",
+              to: "/docs/category/javascript",
             },
             {
               label: "TypeScript",
-              // sidebarId: "typescript_sidebarId",
-              to: "/docs/javaScript/typescript/intro",
+              to: "/docs/category/typescript",
             },
             {
               label: "Node.js®",
-              // sidebarId: "nodejs_sidebarId",
-              to: "/docs/javaScript/nodejs/intro",
+              to: "/docs/category/nodejs",
             },
           ],
         },
@@ -88,12 +82,10 @@ const config: Config = {
           items: [
             {
               label: "Dart",
-              // sidebarId: "dart_sidebarId",
               to: "/docs/dart/dart/intro",
             },
             {
               label: "Flutter",
-              // sidebarId: "flutter_sidebarId",
               to: "/docs/dart/flutter/intro",
             },
           ],
