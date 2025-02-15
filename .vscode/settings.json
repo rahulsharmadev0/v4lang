@@ -1,0 +1,6 @@
+{
+    "files.exclude": {
+        "v4lang/node_modules": true,
+        "v4lang/.docusaurus": true
+    }
+}

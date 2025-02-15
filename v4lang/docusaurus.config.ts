@@ -2,8 +2,6 @@ import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
-// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
-
 const config: Config = {
   title: "v4lang",
   tagline: "Dinosaurs are cool",
@@ -44,7 +42,8 @@ const config: Config = {
           },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+          editUrl:
+            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
           // Useful options to enforce blogging best practices
           onInlineTags: "warn",
           onInlineAuthors: "warn",
@@ -56,10 +55,13 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-
+  
   themeConfig: {
     // Replace with your project's social card
     image: "img/docusaurus-social-card.jpg",
+    colorMode: {
+      defaultMode: "dark",
+    },
     navbar: {
       title: "v4lang",
       logo: {
@@ -68,35 +70,56 @@ const config: Config = {
       },
       items: [
         {
-          type: "docSidebar",
+          type: "dropdown",
           sidebarId: "javascriptSidebar",
           position: "left",
-          label: "JavaScript",
+          label: "📜 JavaScript ",
           to: "/docs/javaScript/intro",
+          items: [
+            {
+              label: "JavaScript",
+              // sidebarId: "javascript_sidebarId",
+              to: "/docs/javaScript/javaScript/intro",
+            },
+            {
+              label: "TypeScript",
+              // sidebarId: "typescript_sidebarId",
+              to: "/docs/javaScript/typescript/intro",
+            },
+            {
+              label: "Node.js®",
+              // sidebarId: "nodejs_sidebarId",
+              to: "/docs/javaScript/nodejs/intro",
+            },
+          ],
         },
-
         {
-          type: "docSidebar",
+          type: "dropdown",
           sidebarId: "dartSidebar",
           position: "left",
-          label: "Dart",
+          label: "🎯 Dart ",
           to: "/docs/dart/intro",
+          items: [
+            {
+              label: "Dart",
+              // sidebarId: "dart_sidebarId",
+              to: "/docs/dart/dart/intro",
+            },
+            {
+              label: "Flutter",
+              // sidebarId: "flutter_sidebarId",
+              to: "/docs/dart/flutter/intro",
+            },
+          ],
         },
-
-        {
-          type: "docSidebar",
-          sidebarId: "javaSidebar",
-          position: "left",
-          label: "Java",
-          to: "/docs/java/intro",
-        },
-
-        { to: "/blog", label: "Blog", position: "left" },
-
         {
           href: "https://github.com/facebook/docusaurus",
           label: "GitHub",
           position: "right",
+        },
+        {
+          type: 'search',
+          position: 'right',
         },
       ],
     },
