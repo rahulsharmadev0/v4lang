@@ -1,6 +1,7 @@
 ---
 sidebar_position: 3
 title: What is REPL?
+slug: ../repl
 ---
 
 # What is REPL? (Ctrl + Shift + I > console)

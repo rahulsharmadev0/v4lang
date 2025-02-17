@@ -1,3 +1,8 @@
+---
+title: Functions
+slug: ../functions
+---
+
 # Functions 🔥
 
 Functions are reusable blocks of code that perform a specific task.

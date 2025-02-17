@@ -1,3 +1,8 @@
+---
+title: Synchronous & Asynchronous in JavaScript
+slug: ../async-sync
+---
+
 # Synchronous & Asynchronous in JavaScript
 
 > JavaScript's single-threaded nature means it can handle one operation at a time. To manage tasks like network requests or file operations without freezing the main thread, JavaScript employs asynchronous programming.
@@ -25,7 +30,6 @@ Task 3
 
 👉 Each statement waits for the previous one to complete.
 
-
 ## **2️⃣ Asynchronous (Non-Blocking)**
 
 - Code execution **continues** without waiting for a task to finish.
@@ -49,7 +53,6 @@ Task 2 (Delayed)  // Executed after 1 second
 
 👉 `setTimeout` runs in the background while Task 3 executes.
 
-
 ## **Event Loop and Concurrency**
 
 JavaScript utilizes an event loop to manage asynchronous operations. The event loop continuously checks the call stack and the task queue. If the call stack is empty, it processes the next task in the queue. This mechanism allows JavaScript to handle asynchronous events efficiently without blocking the main thread.
@@ -72,7 +75,14 @@ A Promise is an object that represents the eventual completion (or failure) of a
 2. **resolve (Fulfilled)**: The operation completed successfully, and the promise has a value.
 3. **rejected**: The operation failed, and the promise has a reason for the failure.
 
-![](assets/image.png)
+```mermaid
+graph LR;
+   Promise["Promise()"]-->pending;
+    pending-->resolve["resolve(value)"];
+    pending-->reject["reject(reason)"];
+    resolve["resolve(value)"]-->then["then()"];
+    reject["reject(reason)"]-->catch["catch()"];
+```
 
 ### **Creating a Promise**
 

@@ -1,6 +1,7 @@
 ---
 sidebar_position: 6
 title: Types of Variable
+slug: ../variables
 ---
 
 # Types of Variable

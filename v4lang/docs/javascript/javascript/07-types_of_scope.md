@@ -1,6 +1,7 @@
 ---
 sidebar_position: 7
 title: Types of Scope
+slug: ../scopes
 ---
 
 # Types of Scope

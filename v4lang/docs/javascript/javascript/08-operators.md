@@ -1,6 +1,7 @@
 ---
 sidebar_position: 7
 title: Operators in JavaScript
+slug: ../operators
 ---
 
 ## **Arithmetic operator:**

@@ -1,6 +1,7 @@
 ---
-sidebar_position: 0
+sidebar_position: 1
 title: Introduction
+slug: ../introduction
 ---
 
 # What is ES6 (ECMAScript 6)?

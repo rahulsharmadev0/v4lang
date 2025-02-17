@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: Data Types in JavaScript
+slug: ../datatypes
 ---
 
 # Data Types in JavaScript

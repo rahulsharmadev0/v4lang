@@ -1,0 +1,790 @@
+---
+title: DDL For Table
+slug: ../ddl/table
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# DDL Commands For Table
+
+## **CREATE TABLE**
+
+the `CREATE TABLE` statement is used to define a new table. It allows specifying column names, data types, constraints, and default values.
+
+**Syntax:**
+
+```sql
+CREATE TABLE table_name (
+    column_name data_type constraints,
+    ...
+);
+```
+
+**Example:**
+
+```sql
+CREATE TABLE employees (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    age INTEGER CHECK (age > 18),
+    department TEXT,
+    salary NUMERIC(10,2) DEFAULT 0.00,
+    hired_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+:::info **Key Features**
+
+- **Column Definitions** → Each column has a name, data type, and optional constraints.
+- **Constraints**:
+  - `PRIMARY KEY` → Ensures uniqueness.
+  - `NOT NULL` → Prevents `NULL` values.
+  - `CHECK` → Adds validation conditions.
+  - `DEFAULT` → Assigns a default value.
+  - `FOREIGN KEY` → Establishes relationships between tables.
+
+:::
+
+## **TRUNCATE TABLE**
+
+The `TRUNCATE` command is used to quickly remove all rows from a table. It is faster than the `DELETE` command because it does not generate individual row delete actions.
+
+**Syntax:**
+
+```sql
+TRUNCATE [TABLE] table_name [, ...] [RESTART IDENTITY] [CASCADE | RESTRICT];
+```
+
+:::info **Parameters**
+
+- **`RESTART IDENTITY`** → Resets the sequence associated with the table’s columns.
+- **`CASCADE`** → Automatically truncates all tables that have foreign-key references to the truncated table.
+- **`RESTRICT (default)`** → Refuses to truncate if any tables have foreign-key references to the truncated table.
+
+<Tabs lazy>
+<TabItem value="1" label="RESTRICT (default)">
+
+```sql
+TRUNCATE TABLE my_table;  // one or more tables
+```
+
+🔹 Removes all rows from `my_table`.
+
+<details>
+<summary>**Example:** Basic PostgreSQL TRUNCATE TABLE statement example</summary>
+
+First, create a new table called `products`:
+
+```sql
+CREATE TABLE products(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  price DECIMAL(10,2) NOT NULL DEFAULT 0
+);
+```
+
+Second, insert some rows into the `products` table:
+
+```sql
+INSERT INTO products (name, price)
+VALUES
+  ('A', 19.99),
+  ('B', 29.99),
+  ('C', 39.99),
+  ('D', 49.99)
+RETURNING *;
+```
+
+Output:
+
+```text
+ id | name | price
+----+------+-------
+  1 | A    | 19.99
+  2 | B    | 29.99
+  3 | C    | 39.99
+  4 | D    | 49.99
+(4 rows)
+```
+
+Third, delete all data from the `products` table using the `TRUNCATE TABLE` statement:
+
+```
+TRUNCATE TABLE products;
+```
+
+Output:
+
+```sql
+TRUNCATE TABLE
+```
+
+</details>
+
+</TabItem>
+<TabItem value="2" label="RESTART IDENTITY">
+
+```sql
+TRUNCATE TABLE my_table RESTART IDENTITY;
+```
+
+🔹 Clears all rows and resets any associated sequence numbers.
+
+<details>
+<summary>**Example:** Using PostgreSQL TRUNCATE TABLE statement with RESTART IDENTITY</summary>
+
+First, create a new table called `employees`:
+
+```sql
+CREATE TABLE employees(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  position VARCHAR(255) NOT NULL
+);
+```
+
+Second, insert some rows into the `employees` table:
+
+```sql
+INSERT INTO employees (name, position)
+VALUES
+  ('Alice', 'Manager'),
+  ('Bob', 'Developer'),
+  ('Charlie', 'Analyst')
+RETURNING *;
+```
+
+Output:
+
+```text
+ id |  name   |  position
+----+---------+-----------
+  1 | Alice   | Manager
+  2 | Bob     | Developer
+  3 | Charlie | Analyst
+(3 rows)
+```
+
+Third, truncate the `employees` table and reset the sequence:
+
+```sql
+TRUNCATE TABLE employees RESTART IDENTITY;
+```
+
+Output:
+
+```sql
+TRUNCATE TABLE
+```
+
+Finally, insert new rows into the `employees` table:
+
+```sql
+INSERT INTO employees (name, position)
+VALUES
+  ('David', 'Designer'),
+  ('Eva', 'Tester')
+RETURNING *;
+```
+
+Output:
+
+```text
+ id |  name  | position
+----+--------+----------
+  1 | David  | Designer
+  2 | Eva    | Tester
+(2 rows)
+```
+
+Note that the `id` sequence has been reset.
+
+</details>
+
+</TabItem>
+<TabItem value="3" label="CASCADE">
+
+```sql
+TRUNCATE TABLE my_table CASCADE;
+```
+
+🔹 Truncates `my_table` and all tables with foreign-key references to it.
+
+<details>
+<summary>**Example:** Using PostgreSQL TRUNCATE TABLE statement to delete data from a table referenced by a foreign key</summary>
+
+First, create tables `orders` and `order_details`:
+
+```sql
+CREATE TABLE orders(
+  order_id SERIAL PRIMARY KEY,
+  customer_name VARCHAR(255) NOT NULL,
+  ordered_date DATE NOT NULL,
+  status VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE order_items (
+  order_id INT NOT NULL,
+  item_id INT NOT NULL,
+  product_name VARCHAR(255) NOT NULL,
+  quantity INT NOT NULL,
+  FOREIGN KEY (order_id)
+   REFERENCES orders(order_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY (order_id, item_id)
+);
+
+INSERT INTO orders (customer_name, ordered_date, status)
+VALUES
+  ('John Doe', '2024-01-25', 'Processing'),
+  ('Jane Smith', '2024-01-26', 'Shipped'),
+  ('Bob Johnson', '2024-01-27', 'Delivered');
+
+INSERT INTO order_items (order_id, item_id, product_name, quantity)
+VALUES
+  (1, 1, 'A', 2),
+  (1, 2, 'B', 1),
+  (2, 1, 'C', 3),
+  (3, 1, 'D', 5),
+  (3, 2, 'E', 2);
+```
+
+Second, attempt to truncate data from the `orders` table:
+
+```sql
+TRUNCATE TABLE orders;
+```
+
+PostgreSQL issues the following error:
+
+```sql
+DETAIL:  Table "order_items" references "orders".
+HINT:  Truncate table "order_items" at the same time, or use TRUNCATE ... CASCADE.
+```
+
+The reason is that the `orders` table is referenced by the `order_items` table. To truncate both the `orders` and `order_items` tables at the same time, you can use the `CASCADE` option.
+
+Third, truncate data from both `orders` and `order_items` tables:
+
+```
+TRUNCATE TABLE orders CASCADE;
+```
+
+PostgreSQL issues the following notice indicating that the `order_items` is also truncated:
+
+```sql
+NOTICE:  truncate cascades to table "order_items"
+TRUNCATE TABLE
+```
+
+Note that the `TRUNCATE TABLE` statement uses the `RESTRICT` option by default to prevent a table that is referenced by a foreign key from being truncated.
+
+</details>
+
+</TabItem>
+</Tabs>
+
+:::
+
+## **DROP TABLE**
+
+The `DROP TABLE` statement is used to remove an existing table from the database. This operation deletes the table structure along with all the data stored in it.
+
+**Syntax:**
+
+```sql
+DROP TABLE [IF EXISTS] table_name [, ...] [CASCADE | RESTRICT];
+```
+
+:::info **Parameters**
+
+- **`IF EXISTS`** → Prevents an error from being thrown if the table does not exist.
+- **`CASCADE`** → Automatically drops objects that depend on the table (such as views).
+- **`RESTRICT (default)`** → Refuses to drop the table if any objects depend on it.
+
+<Tabs lazy>
+<TabItem value="1" label="RESTRICT (default)">
+
+```sql
+DROP TABLE my_table;
+```
+
+🔹 Removes `my_table` if no other objects depend on it.
+
+<details>
+<summary>**Example:** Basic PostgreSQL DROP TABLE statement example</summary>
+
+First, create a new table called `customers`:
+
+```sql
+CREATE TABLE customers(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL
+);
+```
+
+Second, insert some rows into the `customers` table:
+
+```sql
+INSERT INTO customers (name, email)
+VALUES
+  ('Alice', 'alice@example.com'),
+  ('Bob', 'bob@example.com');
+```
+
+Output:
+
+```text
+ id | name  |       email
+----+-------+--------------------
+  1 | Alice | alice@example.com
+  2 | Bob   | bob@example.com
+(2 rows)
+```
+
+Third, drop the `customers` table:
+
+```sql
+DROP TABLE customers;
+```
+
+Output:
+
+```sql
+DROP TABLE
+```
+
+</details>
+
+</TabItem>
+<TabItem value="2" label="CASCADE">
+
+```sql
+DROP TABLE my_table CASCADE;
+```
+
+🔹 Drops `my_table` and all dependent objects.
+
+<details>
+<summary>**Example:** Using PostgreSQL DROP TABLE statement with CASCADE</summary>
+
+First, create tables `departments` and `employees`:
+
+```sql
+CREATE TABLE departments(
+  department_id SERIAL PRIMARY KEY,
+  department_name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE employees (
+  employee_id SERIAL PRIMARY KEY,
+  employee_name VARCHAR(255) NOT NULL,
+  department_id INT,
+  FOREIGN KEY (department_id)
+   REFERENCES departments(department_id) ON DELETE CASCADE
+);
+
+INSERT INTO departments (department_name)
+VALUES
+  ('HR'),
+  ('Engineering');
+
+INSERT INTO employees (employee_name, department_id)
+VALUES
+  ('Alice', 1),
+  ('Bob', 2);
+```
+
+Second, attempt to drop the `departments` table:
+
+```sql
+DROP TABLE departments;
+```
+
+PostgreSQL issues the following error:
+
+```sql
+ERROR:  cannot drop table departments because other objects depend on it
+DETAIL:  table employees depends on table departments
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+```
+
+Third, drop the `departments` table with `CASCADE`:
+
+```sql
+DROP TABLE departments CASCADE;
+```
+
+Output:
+
+```sql
+NOTICE:  drop cascades to table "employees"
+DROP TABLE
+```
+
+Note that the `employees` table is also dropped because it depends on the `departments` table.
+
+</details>
+
+</TabItem>
+<TabItem value="3" label="IF EXISTS">
+
+```sql
+DROP TABLE IF EXISTS my_table;
+```
+
+🔹 Drops `my_table` if it exists, otherwise does nothing.
+
+<details>
+<summary>**Example:** Using PostgreSQL DROP TABLE statement with IF EXISTS</summary>
+
+First, create a new table called `projects`:
+
+```sql
+CREATE TABLE projects(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
+);
+```
+
+Second, drop the `projects` table:
+
+```sql
+DROP TABLE projects;
+```
+
+Output:
+
+```sql
+DROP TABLE
+```
+
+Third, attempt to drop the `projects` table again using `IF EXISTS`:
+
+```sql
+DROP TABLE IF EXISTS projects;
+```
+
+Output:
+
+```sql
+NOTICE:  table "projects" does not exist, skipping
+DROP TABLE
+```
+
+Note that no error is thrown because the `IF EXISTS` clause is used.
+
+</details>
+
+</TabItem>
+</Tabs>
+
+:::
+
+## **ALTER TABLE**
+
+The `ALTER TABLE` command is used to modify an existing table’s structure.
+
+- Add a column
+- Drop a column
+- Change the data type of a column
+- Rename a column
+- Set a default value for a column
+- Rename a table
+
+**Syntax:**
+
+```sql
+ALTER TABLE table_name action;
+```
+
+### Add, Drop, Rename Column
+
+<Tabs>
+<TabItem value="Add Column" label="Add Column">
+
+```sql
+ALTER TABLE table_name ADD COLUMN new_column_name column_type;
+```
+
+🔹 Adds a new column to the table.
+
+<details>
+<summary>**Example:** Adding a new column to the `employees` table</summary>
+
+First, create the `employees` table:
+
+```sql
+CREATE TABLE employees (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  department TEXT
+);
+```
+
+Second, add a new column `birthdate`:
+
+```sql
+ALTER TABLE employees ADD COLUMN birthdate DATE;
+```
+
+**Before:**
+
+```text
+ id | name | department
+----+------+------------
+  1 | John | Sales
+  2 | Jane | HR
+```
+
+**After:**
+
+```text
+ id | name | department | birthdate
+----+------+------------+-----------
+  1 | John | Sales      |
+  2 | Jane | HR         |
+```
+
+</details>
+
+</TabItem>
+<TabItem value="Drop Column" label="Drop Column">
+
+```sql
+ALTER TABLE table_name DROP COLUMN column_name;
+```
+
+🔹 Removes a column from the table.
+
+<details>
+<summary>**Example:** Dropping a column from the `employees` table</summary>
+
+First, create the `employees` table with the `birthdate` column:
+
+```sql
+CREATE TABLE employees (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  department TEXT,
+  birthdate DATE
+);
+```
+
+Second, drop the `birthdate` column:
+
+```sql
+ALTER TABLE employees DROP COLUMN birthdate;
+```
+
+**Before:**
+
+```text
+ id | name | department | birthdate
+----+------+------------+-----------
+  1 | John | Sales      | 1980-01-01
+  2 | Jane | HR         | 1990-02-02
+```
+
+**After:**
+
+```text
+ id | name | department
+----+------+------------
+  1 | John | Sales
+  2 | Jane | HR
+```
+
+</details>
+</TabItem>
+
+<TabItem value="Rename Column" label="Rename Column">
+
+```sql
+ALTER TABLE table_name RENAME COLUMN old_column_name TO new_column_name;
+```
+
+🔹 Renames a column in the table.
+
+<details>
+<summary>**Example:** Renaming a column in the `employees` table</summary>
+
+First, create the `employees` table:
+
+```sql
+CREATE TABLE employees (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  birthdate DATE
+);
+```
+
+Second, rename the `birthdate` column to `date_of_birth`:
+
+```sql
+ALTER TABLE employees RENAME COLUMN birthdate TO date_of_birth;
+```
+
+**Before:**
+
+```text
+ id | name | birthdate
+----+------+-----------
+  1 | John | 1980-01-01
+  2 | Jane | 1990-02-02
+```
+
+**After:**
+
+```text
+ id | name | date_of_birth
+----+------+--------------
+  1 | John | 1980-01-01
+  2 | Jane | 1990-02-02
+```
+
+</details>
+</TabItem>
+</Tabs>
+
+### Change Data Type
+
+```sql
+ALTER TABLE table_name ALTER COLUMN column_name TYPE new_data_type;
+```
+
+🔹 Changes the data type of an existing column.
+
+<details>
+<summary>**Example:** Changing the data type of a column in the `employees` table</summary>
+
+First, create the `employees` table:
+
+```sql
+CREATE TABLE employees (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  salary INTEGER
+);
+```
+
+Second, change the data type of the `salary` column:
+
+```sql
+ALTER TABLE employees ALTER COLUMN salary TYPE NUMERIC(10, 2);
+```
+
+**Before:**
+
+```text
+ id | name | salary
+----+------+--------
+  1 | John | 50000
+  2 | Jane | 60000
+```
+
+**After:**
+
+```text
+ id | name | salary
+----+------+---------
+  1 | John | 50000.00
+  2 | Jane | 60000.00
+```
+
+</details>
+
+### Set Default Value
+
+```sql
+ALTER TABLE table_name ALTER COLUMN column_name SET DEFAULT default_value;
+```
+
+🔹 Sets a default value for a column.
+
+<details>
+<summary>**Example:** Setting a default value for a column in the `employees` table</summary>
+
+First, create the `employees` table:
+
+```sql
+CREATE TABLE employees (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  status VARCHAR(20)
+);
+```
+
+Second, set a default value for the `status` column:
+
+```sql
+ALTER TABLE employees ALTER COLUMN status SET DEFAULT 'active';
+```
+
+**Before:**
+
+```text
+ id | name | status
+----+------+--------
+  1 | John |
+  2 | Jane |
+```
+
+**After:**
+
+```text
+ id | name | status
+----+------+--------
+  1 | John | active
+  2 | Jane | active
+```
+
+</details>
+
+### Rename Table
+
+```sql
+ALTER TABLE old_table_name RENAME TO new_table_name;
+```
+
+🔹 Renames the table.
+
+<details>
+<summary>**Example:** Renaming the `employees` table</summary>
+
+First, create the `employees` table:
+
+```sql
+CREATE TABLE employees (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  department TEXT
+);
+```
+
+Second, rename the `employees` table to `staff`:
+
+```sql
+ALTER TABLE employees RENAME TO staff;
+```
+
+**Before:**
+
+```text
+ id | name | department
+----+------+------------
+  1 | John | Sales
+  2 | Jane | HR
+```
+
+**After:**
+
+```text
+ id | name | department
+----+------+------------
+  1 | John | Sales
+  2 | Jane | HR
+```
+
+</details>

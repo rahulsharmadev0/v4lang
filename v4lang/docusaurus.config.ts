@@ -6,7 +6,7 @@ const config: Config = {
   title: "v4lang",
   tagline: "Dinosaurs are cool",
   favicon: "img/favicon.ico",
-  
+
   // Set the production url of your site here
   url: "https://github.com",
   // Set the /<baseUrl>/ pathname under which your site is served
@@ -38,7 +38,12 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-  
+  markdown: {
+    mermaid: true,
+  },
+
+  themes: ["@docusaurus/theme-mermaid"],
+
   themeConfig: {
     // Replace with your project's social card
     image: "img/docusaurus-social-card.jpg",
@@ -47,6 +52,7 @@ const config: Config = {
     },
     navbar: {
       title: "v4lang",
+      hideOnScroll: true,
       logo: {
         alt: "v4lang Logo",
         src: "img/logo.svg",
@@ -54,40 +60,52 @@ const config: Config = {
       items: [
         {
           type: "dropdown",
-          sidebarId: "javascriptSidebar",
+          sidebarId: "javascript",
           position: "left",
           label: "📜 JavaScript ",
-          to: "/docs/category/javascript",
+          to: "/docs/javascript/javascript",
           items: [
             {
+              type: "docSidebar",
+              sidebarId: "javascript",
               label: "JavaScript",
-              to: "/docs/category/javascript",
+              to: "/docs/javascript",
             },
             {
+              type: "docSidebar",
+              sidebarId: "typescript",
               label: "TypeScript",
-              to: "/docs/category/typescript",
+              to: "/docs/javascript/typescript",
             },
             {
+              type: "docSidebar",
+              sidebarId: "nodejs",
               label: "Node.js®",
-              to: "/docs/category/nodejs",
+              to: "/docs/javascript/nodejs",
             },
           ],
         },
         {
           type: "dropdown",
-          sidebarId: "dartSidebar",
+          sidebarId: "dart",
           position: "left",
           label: "🎯 Dart ",
-          to: "/docs/dart/intro",
+          to: "/docs/dart",
           items: [
-            {
-              label: "Dart",
-              to: "/docs/dart/dart/intro",
-            },
-            {
-              label: "Flutter",
-              to: "/docs/dart/flutter/intro",
-            },
+            { type: "docSidebar", label: "Dart", sidebarId: "dart", to: "/docs/dart/dart" },
+            { type: "docSidebar", label: "Flutter", sidebarId: "flutter", to: "/docs/dart/flutter" },
+          ],
+        },
+        {
+          type: "dropdown",
+          sidebarId: "sql",
+          position: "left",
+          label: "SQL ",
+          to: "/docs/sql",
+          items: [
+            { type: "docSidebar", label: "SQL", sidebarId: "sql", to: "/docs/sql/sql" },
+            { type: "docSidebar", label: "ER Diagram", sidebarId: "er_diagram", to: "/docs/sql/er_diagram" },
+            { type: "docSidebar", label: "PostgreSQL", sidebarId: "postgresql", to: "/docs/sql/postgresql" },
           ],
         },
         {
@@ -96,8 +114,8 @@ const config: Config = {
           position: "right",
         },
         {
-          type: 'search',
-          position: 'right',
+          type: "search",
+          position: "right",
         },
       ],
     },

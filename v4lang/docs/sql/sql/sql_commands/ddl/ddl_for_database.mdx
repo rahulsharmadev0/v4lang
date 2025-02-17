@@ -1,0 +1,145 @@
+---
+title: DDL For Database
+slug: ../ddl/database
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# DDL Commands For Database
+
+## **CREATE DATABASE**
+
+`CREATE DATABASE` command to create a new database. It allows specifying optional configurations like ownership, encoding, collation, and templates.
+
+**Syntax**
+
+```sql
+CREATE DATABASE database_name
+WITH OWNER = owner_name // optional
+ENCODING = 'UTF8' // optional
+LC_COLLATE = 'en_US.UTF-8' // optional
+LC_CTYPE = 'en_US.UTF-8' // optional
+TEMPLATE = template0; // optional
+```
+
+## **DROP DATABASE**
+
+The SQL DROP DATABASE statement is used to delete an existing database along with all the data such as tables, views, indexes, stored procedures, and constraints.
+
+**Syntax:**
+
+```sql
+DROP DATABASE [IF EXISTS] database_name [WITH (FORCE)];
+```
+
+:::info **Parameters**
+
+- **`IF EXISTS`** → Prevents an error if the database does not exist.
+- **`WITH (FORCE)`** → Terminates active connections before dropping (useful when other users are connected).
+
+<Tabs>
+<TabItem value="Basic Usage" label="Basic Usage">
+
+```sql
+DROP DATABASE my_database;
+```
+
+🔹 This removes `my_database` but fails if it doesn’t exist.
+
+</TabItem>
+<TabItem value="Avoid Error" label="IF EXISTS">
+
+Avoid Error if Database Doesn’t Exist
+
+```sql
+DROP DATABASE IF EXISTS my_database;
+```
+
+🔹 Ensures PostgreSQL doesn’t throw an error if the database is already deleted.
+
+</TabItem>
+<TabItem value="Force Drop" label="WITH (FORCE)">
+
+Terminate Active Connections
+
+```sql
+DROP DATABASE my_database WITH (FORCE);
+```
+
+🔹 Useful when the database has active sessions that prevent deletion.
+
+</TabItem>
+</Tabs>
+
+:::
+
+## **ALTER DATABASE**
+
+The `ALTER DATABASE` command is used to modify an existing database’s properties.
+
+- Change the attributes of the database
+- Rename the database
+- Change the owner of the database
+- Change the default tablespace of a database
+- Change the session default for a run-time configuration variable for a database
+
+**Syntax:**
+
+```sql
+ALTER DATABASE database_name action;
+```
+
+:::info Common Actions
+
+<Tabs>
+<TabItem value="Rename Database" label="Rename Database">
+
+```sql
+ALTER DATABASE old_name RENAME TO new_name;
+```
+
+🔹 Changes the database name (cannot be connected to it while renaming).
+
+</TabItem>
+<TabItem value="Change Owner" label="Change Owner">
+
+```sql
+ALTER DATABASE database_name OWNER TO new_owner;
+```
+
+🔹 Transfers ownership to another user.
+
+</TabItem>
+<TabItem value="Set Configuration" label="Set Configuration">
+
+```sql
+ALTER DATABASE database_name SET parameter = value;
+```
+
+🔹 Configures settings like timezone or encoding.
+
+</TabItem>
+<TabItem value="RESET Configuration" label="RESET Configuration">
+
+```sql
+ALTER DATABASE database_name RESET parameter;
+```
+
+🔹 Resets a parameter to its default value.
+
+</TabItem>
+<TabItem value="Change Connection Limits" label="Change Connection Limits">
+
+```sql
+ALTER DATABASE database_name WITH CONNECTION LIMIT 50;
+```
+
+🔹 Restricts the maximum number of concurrent connections.
+
+</TabItem>
+</Tabs>
+
+:::
+
+// TODO: Write From Here

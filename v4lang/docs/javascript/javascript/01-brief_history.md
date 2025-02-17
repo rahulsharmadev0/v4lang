@@ -1,6 +1,7 @@
 ---
-sidebar_position: 1
+sidebar_position: 1.1
 title: Brief History of JavaScript
+slug: ../history
 ---
 
 # Brief History of JavaScript

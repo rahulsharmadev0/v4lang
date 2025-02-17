@@ -1,6 +1,7 @@
 ---
 sidebar_position: 5
 title: Data Type Converstion
+slug: ../datatype_converstion
 ---
 
 # Data Type Converstion

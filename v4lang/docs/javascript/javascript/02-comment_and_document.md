@@ -1,6 +1,7 @@
 ---
 sidebar_position: 2
 title: Comment and Document
+slug: ../comment_and_document
 ---
 
 # How to Comment and Document Code in JavaScript?
