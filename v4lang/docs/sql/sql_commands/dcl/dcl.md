@@ -1,6 +1,6 @@
 ---
 title: Data Control Language
-slug: ../dcl
+slug: dcl
 ---
 
 Data Control Language (DCL) commands are used to control access to data within the database.
@@ -54,7 +54,7 @@ password 'YourPassword';
 
 Replace the `YourPassword` with the one you want.
 
-Third, [create a new table](ddl/table#create-table) called `candidates`:
+Third, [create a new table](/sql/sql_commands/ddl/table#create-table) called `candidates`:
 
 ```sql
 create table candidates (
@@ -99,11 +99,11 @@ SELECT * FROM candidates;
 
 PostgreSQL returns an empty result set instead of an error.
 
-Seventh, execute the following [`INSERT`](dml/table#insert) statement:
+Seventh, execute the following [`INSERT`](/sql/sql_commands/dml/table#insert) statement:
 
 ```sql
 INSERT INTO candidates(first_name, last_name, email, phone)
-VALUES('Joe','Com','[[email protected]](../cdn-cgi/l/email-protection.html)','408-111-2222');
+VALUES('Joe','Com','[[email protected]](cdn-cgi/l/email-protection.html)','408-111-2222');
 ```
 
 PostgreSQL issued the following error because `joe` does not have the `INSERT` privilege on the `candidates` table:
@@ -124,7 +124,7 @@ Ninth, execute the `INSERT` statement again from the `joe`‘s session:
 
 ```sql
 INSERT INTO candidates(first_name, last_name, email, phone)
-VALUES('Joe','Com','[[email protected]](../cdn-cgi/l/email-protection.html)','408-111-2222');
+VALUES('Joe','Com','[[email protected]](cdn-cgi/l/email-protection.html)','408-111-2222');
 ```
 
 Now, `joe` can insert data into the `candidates` table. Additionally, it can update or delete data from the table.
@@ -199,13 +199,13 @@ Third, specify the name of the role from which you want to revoke privileges.
 <details>
 <summary>Step 1\. Create a role and grant privileges</summary>
 
-First, use the `postgres` user to log in to the `dvdrental` [sample database](../postgresql-getting-started/postgresql-sample-database):
+First, use the `postgres` user to log in to the `dvdrental` sample database:
 
 ```bash
 psql -U postgres -d dvdrental
 ```
 
-Second, [create a new role](postgresql-roles) called `jim` with the `LOGIN` and `PASSWORD` attributes:
+Second, create a new role called `jim` with the `LOGIN` and `PASSWORD` attributes:
 
 ```sql
 CREATE ROLE jim LOGIN PASSWORD 'YourPassword';

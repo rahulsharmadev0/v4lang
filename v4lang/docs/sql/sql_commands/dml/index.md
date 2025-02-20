@@ -1,6 +1,6 @@
 ---
 title: Data Manipulation Language
-slug: ../dml
+slug: dml
 ---
 
 Data Manipulation Language (DML) commands are used for managing data within schema objects.

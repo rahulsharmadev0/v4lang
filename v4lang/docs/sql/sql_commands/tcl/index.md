@@ -1,6 +1,6 @@
 ---
 title: Transaction Control Language
-slug: ../tcl
+slug: tcl
 ---
 
 Transaction Control Language (TCL) commands are used to manage transactions in the database.

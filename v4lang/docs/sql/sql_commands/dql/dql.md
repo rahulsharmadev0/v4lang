@@ -1,6 +1,6 @@
 ---
 title: Data Query Language
-slug: ../dql
+slug: dql
 ---
 
 Data Query Language (DQL) commands are used to query the database for information.

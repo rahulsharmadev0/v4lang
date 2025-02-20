@@ -1,6 +1,6 @@
 ---
 title: DDL For Schema
-slug: ../ddl/schema
+slug: schema
 ---
 
 :::info
@@ -13,7 +13,7 @@ A database schema is a structure that defines how data is organized in a relatio
 
 # Introduction to PostgreSQL CREATE SCHEMA statement
 
-The `CREATE SCHEMA` statement allows you to create a new [schema](postgresql-schema) in the current database.
+The `CREATE SCHEMA` statement allows you to create a new schema in the current database.
 
 The following illustrates the syntax of the `CREATE SCHEMA` statement:
 
@@ -37,7 +37,7 @@ AUTHORIZATION username;
 
 In this case, the schema will have the same name as the `username`.
 
-PostgreSQL allows you to create a schema and a list of objects such as tables and [views](../postgresql-views) using a single statement as follows:
+PostgreSQL allows you to create a schema and a list of objects such as tables and views using a single statement as follows:
 
 ```css
 CREATE SCHEMA schema_name
@@ -75,7 +75,7 @@ ORDER BY nspname;
 
 ### 2. Using CREATE SCHEMA statement to create a schema for a user example
 
-First, [create a new role](postgresql-roles) with named `john`:
+First, create a new role with named `john`:
 
 ```php
 CREATE ROLE john

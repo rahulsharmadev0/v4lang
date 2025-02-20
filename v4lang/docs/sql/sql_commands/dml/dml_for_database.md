@@ -1,4 +1,4 @@
 ---
 title: DML For Database
-slug: ../dml/database
+slug: dml/database
 ---

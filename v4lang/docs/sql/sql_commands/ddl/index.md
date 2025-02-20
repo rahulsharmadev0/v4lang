@@ -1,6 +1,5 @@
 ---
 title: Data Definition Language
-slug: ../ddl
 ---
 
 Data Definition Language (DDL) commands are used to define and manage database structures such as tables, indexes, and schemas.

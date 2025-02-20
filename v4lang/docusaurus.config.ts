@@ -3,8 +3,8 @@ import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
 const config: Config = {
-  title: "v4lang",
-  tagline: "Dinosaurs are cool",
+  title: "v4Lang",
+  tagline: `Your ultimate resource for learning JavaScript, Dart, SQL, and more!`,
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
@@ -53,8 +53,6 @@ const config: Config = {
       },
     },
 
-    // Replace with your project's social card
-    image: "img/docusaurus-social-card.jpg",
     colorMode: {
       defaultMode: "dark",
     },
@@ -72,7 +70,7 @@ const config: Config = {
           position: "left",
           label: "📜 JavaScript ",
           sidebarId: "javascriptSidebar",
-          to: "../javascript",
+          to: "javascript",
           items: [
             {
               type: "docSidebar",
@@ -96,7 +94,7 @@ const config: Config = {
           sidebarId: "dartSidebar",
           position: "left",
           label: "🎯 Dart ",
-          to: "../dart",
+          to: "dart",
           items: [
             { type: "docSidebar", label: "Dart", sidebarId: "dartSidebar" },
             { type: "docSidebar", label: "Flutter", sidebarId: "flutterSidebar" },
@@ -107,7 +105,7 @@ const config: Config = {
           sidebarId: "sqlSidebar",
           position: "left",
           label: "🐘 SQL ",
-          to: "../sql",
+          to: "sql",
           items: [
             { type: "docSidebar", label: "SQL", sidebarId: "sqlSidebar" },
             { type: "docSidebar", label: "ER Diagram", sidebarId: "er_diagramSidebar" },
@@ -129,46 +127,77 @@ const config: Config = {
       style: "dark",
       links: [
         {
-          title: "Javascript",
+          title: "JavaScript",
           items: [
             {
-              label: "Javascript",
-              to: "/docs/javaScript",
+              label: "JavaScript",
+              to: "javascript",
+            },
+            {
+              label: "TypeScript",
+              to: "typescript",
+            },
+            {
+              label: "Node.js®",
+              to: "nodejs",
             },
           ],
         },
         {
-          title: "Community",
+          title: "Dart",
           items: [
             {
-              label: "Stack Overflow",
-              href: "https://stackoverflow.com/questions/tagged/docusaurus",
+              label: "Dart",
+              to: "dart",
             },
             {
-              label: "Discord",
-              href: "https://discordapp.com/invite/docusaurus",
-            },
-            {
-              label: "X",
-              href: "https://x.com/docusaurus",
+              label: "Flutter",
+              to: "flutter",
             },
           ],
         },
+        {
+          title: "SQL",
+          items: [
+            {
+              label: "SQL",
+              to: "sql",
+            },
+            {
+              label: "ER Diagram",
+              to: "er_diagram",
+            },
+            {
+              label: "PostgreSQL",
+              to: "postgresql",
+            },
+          ],
+        },
+
         {
           title: "More",
           items: [
             {
-              label: "Blog",
-              to: "/blog",
+              label: "LinkedIn",
+              href: "https://www.linkedin.com/in/rahulsharmadev",
             },
             {
               label: "GitHub",
-              href: "https://github.com/facebook/docusaurus",
+              href: "https://github.com/rahulsharmadev0",
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} v4lang.`,
+      copyright: `Copyright © ${new Date().getFullYear()} v4Lang - rahulsharmadev`,
+      logo: {
+        alt: "v4lang Logo",
+        src: "img/logo.svg",
+        width: 50,
+        href: "/",
+        style: {
+          margin: "0 auto",
+        },
+      },
     },
     prism: {
       theme: prismThemes.github,
