@@ -1,10 +1,23 @@
 {
-  "hosting": {
-    "public": "v4lang/build",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
-  }
+  "hosting": [
+    {
+      "target": "production",
+      "public": "v4lang/build",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    },
+    {
+      "target": "beta",
+      "public": "v4lang/build",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "site": "v4lang-beta"
+    }
+  ]
 }

@@ -1,0 +1,42 @@
+name: Deploy to production on GitHub Pages and Firebase Hosting
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js with caching
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: "v4lang/package-lock.json"
+
+      - name: Install Dependencies
+        run: npm ci
+        working-directory: v4lang
+
+      - name: Update Version & Build Website
+        run: |
+          npm version patch --no-git-tag-version
+          npm run build
+        working-directory: v4lang
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./v4lang/build
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_V4LANG }}
+          channelId: live
+          projectId: v4lang
