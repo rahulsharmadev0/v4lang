@@ -27,7 +27,6 @@ jobs:
 
       - name: Update Version & Build Website
         run: |
-          npm version prerelease --preid=beta --no-git-tag-version
           npm run build
         working-directory: v4lang
 
@@ -36,6 +35,5 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_V4LANG }}
           projectId: v4lang
-          channelId: beta
-          target: beta
-          expires: 7d
+          channelId: live
+          target: v4lang-beta

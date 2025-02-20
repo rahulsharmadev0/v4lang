@@ -23,7 +23,6 @@ jobs:
 
       - name: Update Version & Build Website
         run: |
-          npm version patch --no-git-tag-version
           npm run build
         working-directory: v4lang
 
