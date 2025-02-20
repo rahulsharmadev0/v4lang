@@ -16,8 +16,7 @@
         "firebase.json",
         "**/.*",
         "**/node_modules/**"
-      ],
-      "site": "v4lang-beta"
+      ]
     }
   ]
 }
