@@ -10,6 +10,7 @@
       ]
     },
     {
+      "target": "beta",
       "public": "v4lang/build",
       "ignore": [
         "firebase.json",
