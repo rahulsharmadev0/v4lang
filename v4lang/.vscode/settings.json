@@ -1,0 +1,33 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**.exe": false,
+    "**.jar": false,
+    "**/.dart_tool": false,
+    "**/.idea": false,
+    "**/.vscode": false,
+    "**/*.devcontainer": false,
+    "**/*.exe": false,
+    "**/*.flutter-plugins": false,
+    "**/*.flutter-plugins-dependencies": false,
+    "**/*.g.dart": false,
+    "**/*.github": false,
+    "**/*.gitignore": false,
+    "**/*.metadata": false,
+    "**/**.iml": false,
+    "**/*analysis_options.yaml": false,
+    "**/build": false,
+    "**/dart": false,
+    "**/pubspec.lock": false,
+    "android": false,
+    "build": false,
+    "web": false,
+    "windows": false
+  },
+  "explorerExclude.backup": {}
+}
