@@ -1,8 +1,8 @@
 name: Deploy to production on GitHub Pages and Firebase Hosting
 on:
   push:
-    branches:
-      - main
+    tags:
+      - deploy
       
 jobs:
   build_and_deploy:
