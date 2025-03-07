@@ -1,0 +1,126 @@
+---
+sidebar_position: 4
+slug: aggregate-functions
+title: Aggregate Functions
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+
+# PostgreSQL Aggregate Functions
+
+Aggregate functions in PostgreSQL perform calculations on a set of rows and return a single value. They are commonly used with the `GROUP BY` clause to summarize data in meaningful ways.
+
+📊 What Are Aggregate Functions?
+Imagine you own a **restaurant** and want to analyze customer orders:
+- **How many orders were placed?**
+- **What is the average order value?**
+- **What was the most expensive dish ordered?**
+
+PostgreSQL aggregate functions help answer these questions efficiently.
+
+<Tabs>
+<TabItem value="1" label="AVG()">
+
+### AVG() – Average Value
+Finds the **average** of a numeric column.
+
+🔎 *“What is the average price of menu items?”*
+```sql
+SELECT AVG(price) AS average_price FROM menu;
+```
+
+💡 **Tip:** Exclude `NULL` values automatically unless handled explicitly.
+
+</TabItem>
+
+<TabItem value="2" label="COUNT()">
+
+### COUNT() – Number of Values
+Returns the **number of rows** (or non-null values) in a column.
+
+🔎 *“How many orders were placed?”*
+```sql
+SELECT COUNT(*) AS total_orders FROM orders;
+```
+
+🔎 *“How many customers provided their email?”*
+```sql
+SELECT COUNT(email) AS provided_emails FROM customers;
+```
+
+💡 **Tip:** `COUNT(*)` counts all rows, including `NULL` values, while `COUNT(column_name)` counts only non-null values.
+
+</TabItem>
+
+<TabItem value="3" label="MAX()">
+### MAX() – Maximum Value
+Finds the **highest** value in a column.
+
+🔎 *“What is the most expensive item on the menu?”*
+```sql
+SELECT MAX(price) AS max_price FROM menu;
+```
+
+💡 **Use Case:** Useful for finding top-performing products, highest salaries, or latest dates.
+
+</TabItem>
+
+<TabItem value="4" label="MIN()">
+
+### MIN() – Minimum Value
+Finds the **lowest** value in a column.
+
+🔎 *“What is the cheapest item on the menu?”*
+```sql
+SELECT MIN(price) AS min_price FROM menu;
+```
+
+💡 **Use Case:** Identifying the least expensive items, earliest dates, or smallest values.
+
+</TabItem>
+
+<TabItem value="5" label="SUM()">
+
+### SUM() – Total Sum of Values
+Calculates the **sum** of all (or distinct) numeric values in a column.
+
+🔎 *“What is the total revenue from all orders?”*
+```sql
+SELECT SUM(total_amount) AS total_revenue FROM orders;
+```
+
+🔎 *“What is the total revenue from unique order values?”*
+```sql
+SELECT SUM(DISTINCT total_amount) AS distinct_total FROM orders;
+```
+
+💡 **Tip:** Use `SUM(DISTINCT column_name)` to exclude duplicate values from the total.
+
+
+🔥 Using Aggregate Functions with GROUP BY
+Often, aggregate functions are combined with `GROUP BY` to analyze data by categories.
+
+🔎 *“What is the total revenue per customer?”*
+```sql
+SELECT customer_id, SUM(total_amount) AS customer_revenue
+FROM orders
+GROUP BY customer_id;
+```
+
+🔎 *“What is the highest order amount per day?”*
+```sql
+SELECT order_date, MAX(total_amount) AS highest_order
+FROM orders
+GROUP BY order_date;
+```
+
+💡 **Tip:** `GROUP BY` helps break down aggregate calculations into meaningful groups.
+</TabItem>
+</Tabs>
+
+<br></br>
+---
+🚀 Final Thoughts
+PostgreSQL aggregate functions provide powerful ways to **analyze large datasets**, extract insights, and make data-driven decisions. Whether you're tracking sales, monitoring trends, or generating reports, these functions are essential tools in SQL.  

@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - dev
+    tags:
+      - deploy
+     
 
 jobs:
   build_and_deploy:
