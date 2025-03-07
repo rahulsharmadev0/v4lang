@@ -2,6 +2,7 @@
 sidebar_position: 1
 title: Loops 
 description: Learn how to use loops to control the flow of your Dart code.
+slug: loops
 ---
 
 ```mermaid
