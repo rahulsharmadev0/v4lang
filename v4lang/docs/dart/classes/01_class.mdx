@@ -1,0 +1,66 @@
+---
+sidebar_position: 1
+title: Classes in Dart
+---
+
+## What is a Class?
+A **class** is a blueprint for creating objects. It defines properties (also known as fields) and methods (functions) that describe the behavior of the object.
+
+Think of a class as a **template**. For example, if "Car" is a class, then individual cars like a Honda or a Ford are objects of that class.
+
+### Class Declaration
+In Dart, we use the `class` keyword to define a class:
+
+```dart
+class ClassName {
+   // Fields (variables)
+   // Methods (functions)
+}
+```
+
+## Class Fields & Methods
+- A **field** (also known as an instance variable) is a variable inside a class that stores data.
+- A **method** is a function inside a class that performs actions.
+
+**Example:**
+```dart
+class Car {
+  String? brand; // Field to store the brand name
+  String? model; // Field to store the model name
+  int? maxSpeed; // Field to store the maximum speed
+
+  // Method to display car details
+  void showDetails() { // Method
+    print("Car Brand: $brand, Model: $model, Max Speed: $maxSpeed km/h");
+  }
+}
+```
+
+## Getters and Setters
+Getter and setter methods are the class methods used to manipulate the data of the class fields.
+- Getter is used to read or get the data of the class field
+- Setter is used to set the data of the class field to some variable.
+
+**Example:**
+```dart
+class Car {
+  String? brand; // Field to store the brand name
+  String? model; // Field to store the model name
+  int? maxSpeed; // Field to store the maximum speed
+
+  // Getter method to get the brand name
+  String get getBrand {
+    return brand!; 
+  }
+
+  // Setter method to set the brand name
+  void set setBrand(String newBrand) {
+    brand = newBrand;
+  }
+
+  // Method to display car details
+  void showDetails() { // Method
+    print("Car Brand: $brand, Model: $model, Max Speed: $maxSpeed km/h");
+  }
+}
+```

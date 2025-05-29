@@ -1,0 +1,112 @@
+---
+sidebar_position: 1
+---
+
+# Function
+
+
+Functions are reusable blocks of code that perform a specific task. Dart supports a variety of function types, allowing for flexibility and powerful programming paradigms.
+
+## Declaring a Function
+
+A basic function in Dart is defined using the `returnType functionName(parameters) {}` syntax:
+
+```dart
+void greet() {
+  print("Hello, Dart!");
+}
+```
+
+## Function Parameters
+Dart provides multiple ways to define function parameters:
+
+### 1. Positional Parameters
+These are required and follow the order in which they are declared.
+
+```dart
+void printInfo(String name, int age) {
+  print("Name: $name, Age: $age");
+}
+```
+
+### 2. Optional Positional Parameters
+Parameters inside square brackets `[]` are optional and default to `null` if not provided.
+
+```dart
+void greetPerson(String name, [String? title]) {
+  print(title != null ? "$title $name" : "Hello, $name");
+}
+```
+
+### 3. Named Parameters
+Named parameters improve readability and can be made optional using curly braces `{}`.
+
+```dart
+void displayInfo({String? name, int age = 18}) {
+  print("Name: $name, Age: $age");
+}
+```
+
+#### Requiring Named Parameters
+To enforce required named parameters, use the `required` keyword:
+
+```dart
+void registerUser({required String username, required String email}) {
+  print("User: $username, Email: $email");
+}
+```
+
+## Function as Types
+Dart is a true object-oriented language, so even functions are objects and have a type `Function`. This means that functions can be assigned to variables or passed as arguments to other functions.
+
+```dart
+void Function(String) messagePrinter = (String message) {
+  print(message);
+};
+```
+
+## Anonymous Functions (Lambda Expressions)
+Functions can be created without a name:
+
+```dart
+var multiply = (int a, int b) => a * b;
+print(multiply(4, 5));
+```
+
+## Lexical Scope
+Dart follows lexical scoping, meaning functions can access variables from their surrounding scope.
+
+```dart
+void outerFunction() {
+  int outerVariable = 10;
+  
+  void innerFunction() {
+    print(outerVariable); // Accessible
+  }
+  
+  innerFunction();
+}
+```
+
+## Lexical Closures
+A closure captures variables from its lexical scope even after the outer function has finished execution.
+
+```dart
+Function counter() {
+  int count = 0;
+  return () => print(++count);
+}
+
+var increment = counter();
+increment(); // 1
+increment(); // 2
+```
+
+## Tear-Offs
+Instead of calling a function directly, you can refer to it as a value and pass it around.
+
+```dart
+void sayHello(String name) => print("Hello, $name");
+var greet = sayHello;
+greet("Alice");
+```

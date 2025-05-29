@@ -101,12 +101,11 @@ const config: Config = {
           ],
         },        {
           type: "dropdown",
-          sidebarId: "sqlSidebar",
+          sidebarId: "postgresqlSidebar",
           position: "left",
           label: "🐘 SQL ",
-          to: "sql",
+          to: "postgresql",
           items: [
-            { type: "docSidebar", label: "SQL", sidebarId: "sqlSidebar" },
             { type: "docSidebar", label: "ER Diagram", sidebarId: "er_diagramSidebar" },
             { type: "docSidebar", label: "PostgreSQL", sidebarId: "postgresqlSidebar" },
           ],
@@ -164,10 +163,6 @@ const config: Config = {
         },        {
           title: "SQL",
           items: [
-            {
-              label: "SQL",
-              to: "sql",
-            },
             {
               label: "ER Diagram",
               to: "er_diagram",

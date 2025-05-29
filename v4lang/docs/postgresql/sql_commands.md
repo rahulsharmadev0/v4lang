@@ -3,7 +3,7 @@ sidebar_position: 2
 title: SQL Commands
 ---
 
-## **What are SQL Commands?**
+## What are SQL Commands?
 
 SQL commands are the fundamental building blocks for interacting with a **DBMS**. They perform various operations such as creating tables, inserting data, querying information, and managing access and security.
 
@@ -17,9 +17,9 @@ flowchart TB
     classDef Pine stroke-width:1px, stroke-dasharray:none, stroke:#254336, fill:#27654A, color:#FFFFFF
 ```
 
-## **Types of SQL Commands**
+## Types of SQL Commands
 
-### **DDL (Data Definition Language)**
+### DDL (Data Definition Language)
 
 Data Definition Language (DDL) commands are used to define and manage database structures such as tables, indexes, and schemas.
 
@@ -39,7 +39,7 @@ flowchart TB
 - **TRUNCATE:** Removes all records from a table, deleting the space allocated for the records.
   :::
 
-### **DML (Data Manipulation Language)**
+### DML (Data Manipulation Language)
 
 Data Manipulation Language (DML) commands are used for managing data within schema objects.
 
@@ -62,7 +62,7 @@ flowchart TB
 - **LOCK:** Locks a table or a row for a transaction.
   :::
 
-### **DCL (Data Control Language)**
+### DCL (Data Control Language)
 
 Data Control Language (DCL) commands are used to control access to data within the database.
 
@@ -80,7 +80,7 @@ flowchart TB
 - **REVOKE:** Removes access privileges given with the GRANT command.
   :::
 
-### **TCL (Transaction Control Language)**
+### TCL (Transaction Control Language)
 
 Transaction Control Language (TCL) commands are used to manage transactions in the database.
 
@@ -101,7 +101,7 @@ flowchart TB
 - **SET TRANSACTION:** Places a name on a transaction.
   :::
 
-### **DQL (Data Query Language)**
+### DQL (Data Query Language)
 
 Data Query Language (DQL) commands are used to query the database for information.
 

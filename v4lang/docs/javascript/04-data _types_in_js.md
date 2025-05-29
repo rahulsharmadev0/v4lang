@@ -20,13 +20,13 @@ slug: datatypes
 
 | **Data Type**   | **Immutable** | **Storage Type** | **Description**                                                                   |
 | --------------- | ------------- | ---------------- | --------------------------------------------------------------------------------- |
-| **`Number`**    | Yes           | value            | integer or floating-point numbers, including `+Infinity`, `-Infinity`, and `NaN`. |
-| **`String`**    | Yes           | value            | textual data enclosed in single, double, or backticks (template literals).        |
-| **`Boolean`**   | Yes           | value            | logical entity: `true` or `false`.                                                |
-| **`null`**      | Yes           | value            | an intentional absence of any object value.                                       |
-| **`undefined`** | Yes           | value            | variable that has been declared but not assigned a value.                         |
-| **`BigInt`**    | Yes           | value            | large integers with arbitrary precision (greater than the limit of `Number`).     |
-| **`Symbol`**    | Yes           | value            | unique and immutable value, often used for object property keys.                  |
-| **`Object`**    | Yes           | reference        | collection of key-value pairs (e.g., objects, arrays, functions).                 |
-| **`Array`**     | Yes           | reference        | type of object used to store ordered collections of data (indexed by numbers).    |
-| **`Function`**  | Yes           | reference        | block of code designed to perform a specific task.                                |
+| **`Number`**    | ✅ Yes        | value            | Integer or floating-point numbers, including `+Infinity`, `-Infinity`, and `NaN`. |
+| **`String`**    | ✅ Yes        | value            | Textual data enclosed in single, double, or backticks (template literals).        |
+| **`Boolean`**   | ✅ Yes        | value            | Logical entity: `true` or `false`.                                                |
+| **`null`**      | ✅ Yes        | value            | An intentional absence of any object value.                                       |
+| **`undefined`** | ✅ Yes        | value            | A variable that has been declared but not assigned a value.                       |
+| **`BigInt`**    | ✅ Yes        | value            | Large integers with arbitrary precision (greater than the limit of `Number`).     |
+| **`Symbol`**    | ✅ Yes        | value            | Unique and immutable value, often used for object property keys.                  |
+| **`Object`**    | ❌ No         | reference        | Collection of key-value pairs (e.g., objects, arrays, functions).                 |
+| **`Array`**     | ❌ No         | reference        | Type of object used to store ordered collections of data (indexed by numbers).    |
+| **`Function`**  | ❌ No         | reference        | Block of code designed to perform a specific task.                                |
