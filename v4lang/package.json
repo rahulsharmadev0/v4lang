@@ -1,6 +1,6 @@
 {
   "name": "v-4-lang",
-  "version": "0.0.9",
+  "version": "0.0.13",
   "description": "V4Lang is a programming language that is designed to be simple, fast, and easy to use.",
   "private": true,
   "scripts": {
