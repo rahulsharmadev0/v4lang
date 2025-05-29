@@ -2,8 +2,6 @@ name: Deploy Beta Version On Firebase Hosting
 on:
   workflow_dispatch:
   push:
-    tags:
-      - deploy
      
 
 jobs:
