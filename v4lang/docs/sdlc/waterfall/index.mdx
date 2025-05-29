@@ -1,0 +1,134 @@
+---
+sidebar_position: 2
+title: Waterfall Model
+slug: waterfall-model
+---
+
+# 💧 Waterfall Model Overview
+
+The **Waterfall Model** is a sequential, step-by-step process for software development. It progresses through distinct stages in a linear fashion, where each phase must be completed before moving to the next.
+
+## Why is it called the Waterfall Model?
+
+The model gets its name from the way it flows downward through phases, similar to a waterfall:
+
+- **No backtracking:** Once a phase is complete, you cannot go back to previous phases
+- **Sequential flow:** Each phase flows into the next in a predetermined order
+- **Requirement stability:** Requirement changes are not allowed mid-cycle
+- **Rigid structure:** Not flexible; leads to longer delivery times but ensures thorough planning
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+    <div style={{ maxWidth: 600 }}>
+        ```mermaid
+        graph TD
+                A[📋 Requirements Collection] --> B[🔍 Feasibility Study]
+                B --> C[🎨 Design]
+                C --> D[💻 Coding]
+                D --> E[🧪 Testing]
+                E --> F[📦 Installation]
+                F --> G[🔧 Maintenance]
+        ```
+    </div>
+</div>
+
+
+
+### 1. Requirement Collection
+- **Process:** Gathering requirements directly from the customer.
+- **Roles:** `Business Analyst (BA)` or `Product Analyst`
+- **BA Role:** Acts as a bridge between the customer and the software company, translating business needs into software requirements.
+- **Who can be a BA?** Experienced domain experts (10–15 years).
+- **Note:** For small projects, a developer may collect requirements.
+
+### 2. Feasibility Study/Analysis
+- **Process:** Assessing if the project is viable.
+- **Roles:** `Project Manager (PM)`, `BA`, `Architect`, `Finance`, `HR`
+- **PM:** Makes the final decision to accept or reject the project.
+- **Architect:** Decides on technologies.
+- **Finance:** Estimates budget.
+- **HR:** Checks resource availability.
+
+### 3. Design
+- **Process:** Creating the application's architecture.
+- **HLD (High-Level Design):** Architectural overview (e.g., main modules like Login, Home, Cart).
+- **LLD (Low-Level Design):** Detailed design of each module (e.g., logic, database tables).
+- **Roles:** `Architect`, `Software Developer`
+
+### 4. Coding (Implementation)
+- **Process:** Developers write code based on the design.
+- **Roles:** `Senior Developer`, `Junior Developer`, `Freshers`
+
+### 5. Testing
+- **Process:** Testers validate the software against requirements using test cases (Black Box Testing).
+- **Roles:** `Senior Tester`, `Junior Tester`, `Freshers`
+- **Why not developers?**
+  - Developers may be overconfident or biased.
+  - They may miss negative scenarios or hide defects.
+  - Focus is on development, not testing.
+  - Leads to quality issues and time waste.
+
+### 6. Installation/Implementation
+- **Process:** IT Engineers install the software at the customer site and provide a demo.
+- **Roles:** `Installation Engineer`, `Implementation Engineer`, `Field Engineer`, `Site Engineer`
+
+### 7. Maintenance
+- **Process:** Ongoing support (typically 6–9 months). Defects found by the customer are fixed free of charge.
+- **Roles:** Smaller team of developers and testers.
+
+## Core Characteristics
+
+### 🔒 Fixed Requirements
+- All requirements must be gathered and finalized at the beginning
+- Changes during development are costly and discouraged
+- Provides stability and predictability for planning
+
+### 📋 Phase-Gate Approach
+- Each phase has specific deliverables and criteria
+- Progress is measured by phase completion
+- Quality gates ensure standards are met before proceeding
+
+### 📊 Predictable Timeline
+- Clear milestones and deadlines
+- Easy to estimate project duration
+- Suitable for projects with well-understood requirements
+
+## ❓ When to Use Waterfall Model
+
+The Waterfall model works best when:
+
+- Requirements are well-defined and unlikely to change
+- Technology is well-understood and stable
+- Project scope is clearly defined
+- Client has clear vision of the final product
+- Regulatory compliance requires extensive documentation
+
+## ❓ Why is it called the Waterfall Model?
+- No backtracking: Once a phase is complete, you cannot go back.
+- Requirement changes are not allowed mid-cycle.
+- Not flexible; leads to longer delivery times.
+
+## ❓ Why do customers keep changing requirements?
+- Market competition
+- Business changes
+- Technology updates
+
+
+## 🤔 Advantages & Disadvantages
+
+| **Advantages** | **Disadvantages** |
+| :--- | :--- |
+| Quality is high since requirements are fixed | Requirement changes are not allowed |
+| Easy to adapt | Developers may be forced to test their own code |
+| Total investment is low | Not flexible |
+|  | Turnaround time is high |
+|  | Backtracking is not possible |
+
+
+
+## 🤔 Service-Based vs Product-Based Company
+
+| **Feature** | **Service-Based Company** | **Product-Based Company** |
+| :--- | :--- | :--- |
+| Core Business | Develops software for clients | Designs and sells its own products |
+| Requirement Role | BA collects requirements from customer | Product Analyst designs requirements from market research |
+| Source Code | No rights to keep/sell code | Full rights to keep/sell code |

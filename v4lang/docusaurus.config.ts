@@ -99,8 +99,7 @@ const config: Config = {
             { type: "docSidebar", label: "Dart", sidebarId: "dartSidebar" },
             { type: "docSidebar", label: "Flutter", sidebarId: "flutterSidebar" },
           ],
-        },
-        {
+        },        {
           type: "dropdown",
           sidebarId: "sqlSidebar",
           position: "left",
@@ -111,6 +110,13 @@ const config: Config = {
             { type: "docSidebar", label: "ER Diagram", sidebarId: "er_diagramSidebar" },
             { type: "docSidebar", label: "PostgreSQL", sidebarId: "postgresqlSidebar" },
           ],
+        },
+        {
+          type: "docSidebar",
+          sidebarId: "sdlcSidebar",
+          position: "left",
+          label: "🔄 SDLC",
+          to: "sdlc",
         },
         {
           href: "https://github.com/rahulsharmadev0/v4lang",
@@ -155,8 +161,7 @@ const config: Config = {
               to: "flutter",
             },
           ],
-        },
-        {
+        },        {
           title: "SQL",
           items: [
             {
@@ -170,6 +175,15 @@ const config: Config = {
             {
               label: "PostgreSQL",
               to: "postgresql",
+            },
+          ],
+        },
+        {
+          title: "SDLC",
+          items: [
+            {
+              label: "SDLC",
+              to: "sdlc",
             },
           ],
         },
