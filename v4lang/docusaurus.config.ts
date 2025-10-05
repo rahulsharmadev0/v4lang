@@ -14,7 +14,6 @@ const config: Config = {
   projectName: "v4lang",
 
   onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
 
   i18n: {
     defaultLocale: "en",
@@ -38,6 +37,9 @@ const config: Config = {
   ],
   markdown: {
     mermaid: true,
+    hooks: {
+      onBrokenMarkdownLinks: "warn",
+    },
   },
 
   themes: ["@docusaurus/theme-mermaid"],
@@ -156,10 +158,6 @@ const config: Config = {
             {
               label: "Java",
               to: "java",
-            },
-            {
-              label: "Spring Boot",
-              to: "spring_boot",
             },
           ],
         },

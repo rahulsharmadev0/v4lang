@@ -99,7 +99,7 @@ SELECT * FROM candidates;
 
 PostgreSQL returns an empty result set instead of an error.
 
-Seventh, execute the following [`INSERT`](/sql/sql_commands/dml/table#insert) statement:
+Seventh, execute the following `INSERT` statement:
 
 ```sql
 INSERT INTO candidates(first_name, last_name, email, phone)
