@@ -7,10 +7,7 @@ const config: Config = {
   tagline: `Your ultimate resource for learning JavaScript, Dart, SQL, and more!`,
   favicon: "img/favicon.ico",
 
-  // Set the production url of your site here
   url: "https://github.com",
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/",
 
   organizationName: "v4lang",
@@ -55,6 +52,8 @@ const config: Config = {
 
     colorMode: {
       defaultMode: "dark",
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
     },
 
     navbar: {
@@ -88,6 +87,14 @@ const config: Config = {
               label: "Node.js®",
             },
           ],
+        },
+        {
+          type: "dropdown",
+          sidebarId: "javaSidebar",
+          position: "left",
+          label: "☕ Java ",
+          to: "java",
+          items: [],
         },
         {
           type: "dropdown",
@@ -140,6 +147,19 @@ const config: Config = {
             {
               label: "Node.js®",
               to: "nodejs",
+            },
+          ],
+        },
+        {
+          title: "Java",
+          items: [
+            {
+              label: "Java",
+              to: "java",
+            },
+            {
+              label: "Spring Boot",
+              to: "spring_boot",
             },
           ],
         },
@@ -201,7 +221,8 @@ const config: Config = {
     },
     prism: {
       theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      darkTheme: prismThemes.vsDark,
+      additionalLanguages: ["dart", "java", "groovy", "sql"],
     },
   } satisfies Preset.ThemeConfig,
 };
