@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
 title: Java Thread
 slug: thread
 ---
@@ -14,13 +14,13 @@ The `Thread` class in Java represents the smallest unit of execution in a progra
 
 Every thread in Java is an independent path of execution within a process. A program begins with the **main thread**, which can create additional threads to perform tasks concurrently.
 
-### Key Properties
+#### Key Properties
 
 - Each thread runs a single task defined by a `Runnable` or by overriding `run()`.
 - Threads share memory but maintain independent call stacks.
 - Thread scheduling and execution order are managed by the **JVM and OS scheduler**, not the developer.
 
-### Example
+#### Example
 
 ```java
 class Worker extends Thread {
@@ -53,7 +53,7 @@ A thread’s lifecycle is managed internally by the JVM. The states are defined 
 | **TIMED_WAITING** | Thread is waiting for a specific time (e.g., `sleep(1000)`).                 |
 | **TERMINATED**    | Thread has completed execution or exited due to an exception.                |
 
-### Example: Visualizing Lifecycle
+#### Example: Visualizing Lifecycle
 
 ```java
 Thread t = new Thread(() -> System.out.println("Running"));
@@ -76,7 +76,7 @@ Thread priorities influence the scheduler’s choice of which thread to run firs
 | `NORM_PRIORITY` | 5     | Default priority |
 | `MAX_PRIORITY`  | 10    | Highest priority |
 
-### Example
+#### Example
 
 ```java
 Thread t1 = new Thread(() -> System.out.println("Low priority"));
@@ -104,7 +104,7 @@ Threads can be constructed in several ways depending on the execution target and
 | `Thread(Runnable target, String name)` | Same as above but assigns a custom name.              |
 | `Thread(String name)`                  | Creates a named thread with no target.                |
 
-### Example
+#### Example
 
 ```java
 Runnable task = () -> System.out.println(Thread.currentThread().getName() + " executing task.");
@@ -123,11 +123,11 @@ The `Thread` class provides several static utility methods to manage thread beha
 | Method               | Description                                                    |
 | -------------------- | -------------------------------------------------------------- |
 | `currentThread()`    | Returns a reference to the currently executing thread.         |
-| `sleep(long millis)` | Temporarily pauses execution for the specified time.           |
+| `sleep(long millis)` | Temporarily pauses execution for the specified time. (doesn’t release locks)          |
 | `yield()`            | Hints the scheduler to give other threads a chance to execute. |
 | `onSpinWait()`       | Optimized CPU spin-wait hint introduced in Java 9.             |
 
-### Example
+#### Example
 
 ```java
 for (int i = 0; i < 3; i++) {
@@ -136,15 +136,13 @@ for (int i = 0; i < 3; i++) {
 }
 ```
 
-⚙️ **Compiler Note:** `sleep()` doesn’t release locks; it only pauses the current thread.
-
 ---
 
 ## 7. The Interrupt Mechanism
 
 Thread interruption is a cooperative mechanism to stop or signal a running thread. It doesn’t forcibly terminate a thread — instead, it sets an internal flag that the thread can check.
 
-### Example
+#### Example
 
 ```java
 class InterruptDemo {
@@ -184,3 +182,39 @@ class InterruptDemo {
 - **Finalization:** Once a thread terminates, it cannot be restarted.
 
 ⚙️ **Compiler Behavior Insight:** The JVM uses a combination of native and managed calls for thread scheduling. Thread objects remain in memory until garbage collected, even after termination.
+
+
+
+## ⚡️ `wait()` vs `sleep()`
+
+| 🔹Aspect                        | 🔹`wait()`                                                                                                | 🔹`sleep()`                                                                             |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| **Purpose**                     | Used for **thread coordination** — allows one thread to pause until another thread notifies it.           | Used for **timed pauses or delays**, usually to throttle execution or simulate waiting. |
+| **Lock release**                | ✅ **Yes**, releases the **monitor lock** of the object it’s called on.                                    | ❌ **No**, thread **holds the lock** (if any) while sleeping.                            |
+| **Requires synchronized block** | ✅ **Yes**, must be called **inside a synchronized block or method**, else `IllegalMonitorStateException`. | ❌ **No**, can be called anywhere.                                                       |
+| **Belongs to**                  | `Object` class (because it’s tied to monitor/lock mechanics).                                             | `Thread` class (because it’s purely about pausing execution).                           |
+| **How thread wakes up**         | By another thread calling `notify()`, `notifyAll()`, or if the thread is **interrupted**.                 | Automatically after the **sleep duration ends** or if **interrupted**.                  |
+| **Throws exception**            | `InterruptedException`                                                                                    | `InterruptedException`                                                                  |
+| **Common use case**             | Producer–Consumer pattern, thread coordination, or waiting for a condition to change.                     | Throttling loops, retry delays, animation timing, etc.                                  |
+| **Changes thread state**        | ✅ **From RUNNABLE → WAITING / TIMED_WAITING** depending on `wait()` overload.                             | ✅ **From RUNNABLE → TIMED_WAITING** (for specified sleep duration).                     |
+| **Monitor behavior**            | Releases the monitor and **lets other threads acquire** it.                                               | Keeps the monitor locked — **other threads are blocked** if they need the same lock.    |
+| **Control location**            | Works on an **object monitor**, so it depends on synchronized object’s lock.                              | Works on the **current thread** only.                                                   |
+| **Resumes execution**           | After being **notified** or **interrupted** (and reacquiring the monitor).                                | After **time elapses** or **interruption**.                                             |
+
+
+
+## ⚡️ `notify()` vs `notifyAll()`
+
+
+| 🔹Aspect                     | 🔹`notify()`                                                                                                 | 🔹`notifyAll()`                                                                                                                                 |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Purpose**                  | Wakes up **one single thread** that is waiting on the object's monitor.                                      | Wakes up **all threads** waiting on the object's monitor.                                                                                       |
+| **Belongs to**               | `Object` class                                                                                               | `Object` class                                                                                                                                  |
+| **Requires synchronization** | ✅ Yes — must be called **within a synchronized block or method** that locks the same object.                 | ✅ Yes — same as `notify()`.                                                                                                                     |
+| **Thread state affected**    | One thread moves from **WAITING → BLOCKED (to re-acquire the lock)** → **RUNNABLE**.                         | All waiting threads move from **WAITING → BLOCKED (to re-acquire the lock)**, but only **one thread actually proceeds first** (others compete). |
+| **Lock behavior**            | Does **not release the lock immediately**; lock is released **after synchronized block ends**.               | Same — lock is released **only when synchronized block exits**.                                                                                 |
+| **Use case**                 | When you know **exactly one thread** needs to be resumed (e.g., single consumer for a single produced item). | When **multiple waiting threads** might need to re-check a condition (e.g., multiple consumers waiting for items).                              |
+| **Performance**              | Slightly more efficient — fewer threads are woken.                                                           | Can be less efficient — may cause “**thundering herd problem**” (many threads waking unnecessarily).                                            |
+| **Risk / Edge Case**         | ❗ If multiple threads are waiting but you call only `notify()`, **others may starve** indefinitely.          | ✅ Safer when multiple waiting threads depend on shared conditions.                                                                              |
+| **Thread scheduling**        | The thread to wake up is **chosen arbitrarily** by JVM — **no guarantee** which one.                         | All waiting threads are awakened, **but scheduling order** is still **unpredictable**.                                                          |
+| **State change**             | Changes **only one thread** from WAITING → BLOCKED (for monitor) → RUNNABLE.                                 | Changes **all waiting threads** from WAITING → BLOCKED (for monitor) → RUNNABLE.                                                                |

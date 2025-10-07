@@ -1,15 +1,12 @@
 ---
-sidebar_position: 3
+sidebar_position: 2
 title: Monitor Lock
 slug: monitor-lock
 ---
-# Java Threads & Monitor Locks 
 
-# 🔒 Monitor Lock (Intrinsic Lock) — Deep Dive
+#  What is a Monitor Lock 🔒?
 
-## What is a Monitor Lock?
-
-A **monitor lock** (intrinsic lock) is the JVM mechanism that enforces mutual exclusion for `synchronized` blocks and methods. Conceptually:
+A **monitor lock** (Intrinsic lock) is the JVM mechanism that enforces mutual exclusion for `synchronized` blocks and methods. Conceptually:
 
 * Every reference-type object has one monitor lock.
 * When a thread enters `synchronized(obj) { ... }` it must first **acquire** `obj`’s monitor.
