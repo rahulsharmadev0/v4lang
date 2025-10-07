@@ -4,253 +4,183 @@ title: Java Thread
 slug: thread
 ---
 
+## 1. Introduction
 
-# 🧵 Java Thread Handbook
-
----
-
-## 1️⃣ Thread Class — Overview
-
-The `Thread` class in Java represents a **single independent path of execution**.
-It’s part of `java.lang`, so no import is required.
+The `Thread` class in Java represents the smallest unit of execution in a program. It allows concurrent execution of multiple tasks, sharing the same process memory space. Understanding `Thread` is essential for mastering Java concurrency, as it forms the foundation for higher-level frameworks like `ExecutorService`, `ForkJoinPool`, and `Virtual Threads`.
 
 ---
 
-## 2️⃣ Thread Constructors
+## 2. Thread Fundamentals
 
-| Constructor                                                               | Description                                             |
-| ------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `Thread()`                                                                | Creates a new thread with no target (override `run()`). |
-| `Thread(Runnable target)`                                                 | Executes the given `Runnable`’s `run()` method.         |
-| `Thread(String name)`                                                     | Creates a thread with a custom name.                    |
-| `Thread(Runnable target, String name)`                                    | Creates a thread with target and name.                  |
-| `Thread(ThreadGroup group, Runnable target)`                              | Adds thread to a custom group.                          |
-| `Thread(ThreadGroup group, Runnable target, String name)`                 | Full constructor with group + target + name.            |
-| `Thread(ThreadGroup group, String name)`                                  | Thread with name inside a group.                        |
-| `Thread(ThreadGroup group, Runnable target, String name, long stackSize)` | Full control (rarely used).                             |
+Every thread in Java is an independent path of execution within a process. A program begins with the **main thread**, which can create additional threads to perform tasks concurrently.
 
----
+### Key Properties
 
-## 3️⃣ Commonly Used Methods
+- Each thread runs a single task defined by a `Runnable` or by overriding `run()`.
+- Threads share memory but maintain independent call stacks.
+- Thread scheduling and execution order are managed by the **JVM and OS scheduler**, not the developer.
 
-| Method                               | Description                                                           |
-| ------------------------------------ | --------------------------------------------------------------------- |
-| `start()`                            | Begins thread execution. Calls `run()` internally.                    |
-| `run()`                              | Code that executes in the thread context.                             |
-| `getName()` / `setName(String)`      | Get or set thread name.                                               |
-| `getId()`                            | Returns unique thread ID.                                             |
-| `getPriority()` / `setPriority(int)` | Get/set scheduling priority.                                          |
-| `isAlive()`                          | Returns true if thread has been started and not yet terminated.       |
-| `getState()`                         | Returns current state (`NEW`, `RUNNABLE`, `BLOCKED`, `WAITING`, etc). |
-| `sleep(ms)`                          | Makes current thread pause temporarily.                               |
-| `yield()`                            | Suggests scheduler to give up CPU to another thread (hint only).      |
-
----
-
-## 4️⃣ Thread Priority
-
-Each thread has a **priority (1–10)** that hints the scheduler about execution preference.
-
-| Constant               | Value | Meaning          |
-| ---------------------- | ----- | ---------------- |
-| `Thread.MIN_PRIORITY`  | 1     | Lowest priority  |
-| `Thread.NORM_PRIORITY` | 5     | Default priority |
-| `Thread.MAX_PRIORITY`  | 10    | Highest priority |
-
-📘 Note: JVM doesn’t guarantee priority-based scheduling — it’s **OS dependent**.
-
----
-
-## 5️⃣ Thread States
-
-| State           | Description                                        |
-| --------------- | -------------------------------------------------- |
-| `NEW`           | Thread created but not started.                    |
-| `RUNNABLE`      | Ready or running on CPU.                           |
-| `BLOCKED`       | Waiting for monitor lock.                          |
-| `WAITING`       | Waiting indefinitely for another thread’s action.  |
-| `TIMED_WAITING` | Waiting for a specific time (e.g., `sleep(1000)`). |
-| `TERMINATED`    | Thread finished execution.                         |
-
----
-
-## 6️⃣ Daemon Threads
-
-Daemon threads run in the background (e.g., GC, background tasks).
-When all user threads finish, JVM exits — even if daemons remain.
+### Example
 
 ```java
-Thread t = new Thread(task);
-t.setDaemon(true);
-t.start();
-```
-
----
-
-## 7️⃣ Thread Naming and Identification
-
-```java
-Thread t = new Thread(() -> System.out.println(Thread.currentThread().getName()), "Worker-1");
-t.start();
-System.out.println(t.getId());
-```
-
----
-
-## 8️⃣ Thread States and Monitoring
-
-```java
-System.out.println(t.getState());
-System.out.println(t.isAlive());
-System.out.println(t.isDaemon());
-```
-
----
-
-## 9️⃣ Interrupt Mechanism — Deep Dive
-
-### 🧠 Concept
-
-The `interrupt` mechanism is **cooperative**.
-Calling `interrupt()` **does not forcibly stop** a thread — it **sets an internal flag** that must be checked by the thread itself.
-
----
-
-### 🧩 Methods Overview
-
-| Method            | Type     | Affects Which Thread    | Clears Flag? | Description                                  |
-| ----------------- | -------- | ----------------------- | ------------ | -------------------------------------------- |
-| `interrupt()`     | Instance | Target thread           | ❌ No         | Requests interruption (sets flag = true).    |
-| `isInterrupted()` | Instance | Target thread           | ❌ No         | Returns flag status (non-destructive).       |
-| `interrupted()`   | Static   | **Current thread only** | ✅ Yes        | Returns current thread’s flag and clears it. |
-
----
-
-### 📘 Important Notes
-
-* `interrupt()` only **signals** the thread — it doesn’t stop it.
-* The target thread must **periodically check** `isInterrupted()` or handle `InterruptedException`.
-* If a thread is in `sleep()` or `wait()`, interruption causes `InterruptedException` and **clears the flag automatically**.
-
----
-
-### ⚠️ `interrupted()` — Common Misunderstanding
-
-Even though you can write:
-
-```java
-t.interrupted();
-```
-
-…it **never checks `t`’s flag**.
-
-`interrupted()` is a **static method** that always applies to the **thread currently executing that line**, typically the **main thread**.
-
-So calling it on another thread object is misleading and ineffective.
-
----
-
-### 🧩 Comparison Summary
-
-| Behavior               | `interrupt()` | `isInterrupted()` | `interrupted()`             |
-| ---------------------- | ------------- | ----------------- | --------------------------- |
-| Sets flag              | ✅ Yes         | ❌ No              | ❌ No                        |
-| Clears flag            | ❌ No          | ❌ No              | ✅ Yes                       |
-| Works on other threads | ✅ Yes         | ✅ Yes             | ⚠️ No (only current thread) |
-| Used for signaling     | ✅             | ❌                 | ❌                           |
-| Used for checking      | ❌             | ✅                 | ✅ (self-check only)         |
-
----
-
-### 💡 Mnemonic
-
-> **“interrupt() is for them, isInterrupted() to watch them, interrupted() to check myself.”**
-
----
-
-### 🧩 Example — Cooperative Interruption
-
-```java
-Thread t = new Thread(() -> {
-    while (!Thread.currentThread().isInterrupted()) {
-        try {
-            System.out.println("Working...");
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            System.out.println("Interrupted! Cleaning up...");
-            Thread.currentThread().interrupt(); // Re-set flag
-        }
+class Worker extends Thread {
+    public void run() {
+        System.out.println("Task running in: " + Thread.currentThread().getName());
     }
-    System.out.println("Thread exiting gracefully.");
-});
-t.start();
-Thread.sleep(3000);
-t.interrupt();
+
+    public static void main(String[] args) {
+        Worker worker = new Worker();
+        worker.start(); // Start the thread
+        System.out.println("Main thread: " + Thread.currentThread().getName());
+    }
+}
 ```
 
-✅ Output:
-
-```
-Working...
-Working...
-Interrupted! Cleaning up...
-Thread exiting gracefully.
-```
+💡 **Note:** Calling `start()` creates a new thread, while calling `run()` directly executes the method in the **current** thread — no new thread is created.
 
 ---
 
-### 🧩 Example — Interrupted Before Start
+## 3. Thread Lifecycle
+
+A thread’s lifecycle is managed internally by the JVM. The states are defined in the `Thread.State` enum.
+
+| State             | Description                                                                  |
+| ----------------- | ---------------------------------------------------------------------------- |
+| **NEW**           | Thread object is created but not yet started.                                |
+| **RUNNABLE**      | Thread is ready or running — actual execution determined by scheduler.       |
+| **BLOCKED**       | Thread is waiting to acquire a monitor lock.                                 |
+| **WAITING**       | Thread is waiting indefinitely for another thread’s action (e.g., `wait()`). |
+| **TIMED_WAITING** | Thread is waiting for a specific time (e.g., `sleep(1000)`).                 |
+| **TERMINATED**    | Thread has completed execution or exited due to an exception.                |
+
+### Example: Visualizing Lifecycle
 
 ```java
-Thread t = new Thread(() -> {
-    if (Thread.currentThread().isInterrupted())
-        System.out.println("Started with interrupt flag = true");
-});
-t.interrupt();  // set flag before start
+Thread t = new Thread(() -> System.out.println("Running"));
+System.out.println(t.getState()); // NEW
+t.start();
+System.out.println(t.getState()); // RUNNABLE or TERMINATED (depends on timing)
+```
+
+⚙️ **Compiler Behavior:** The JVM tracks thread state transitions internally; developers cannot manually change them.
+
+---
+
+## 4. Thread Priority
+
+Thread priorities influence the scheduler’s choice of which thread to run first. However, **they are merely hints** — the JVM may ignore them depending on the underlying OS.
+
+| Constant        | Value | Meaning          |
+| --------------- | ----- | ---------------- |
+| `MIN_PRIORITY`  | 1     | Lowest priority  |
+| `NORM_PRIORITY` | 5     | Default priority |
+| `MAX_PRIORITY`  | 10    | Highest priority |
+
+### Example
+
+```java
+Thread t1 = new Thread(() -> System.out.println("Low priority"));
+Thread t2 = new Thread(() -> System.out.println("High priority"));
+
+t1.setPriority(Thread.MIN_PRIORITY);
+t2.setPriority(Thread.MAX_PRIORITY);
+
+t1.start();
+t2.start();
+```
+
+⚠️ **Edge Case:** High priority does not guarantee earlier execution — OS-level scheduling can override it.
+
+---
+
+## 5. Thread Constructors
+
+Threads can be constructed in several ways depending on the execution target and naming.
+
+| Constructor                            | Description                                           |
+| -------------------------------------- | ----------------------------------------------------- |
+| `Thread()`                             | Creates a new thread with default name and no target. |
+| `Thread(Runnable target)`              | Executes the target’s `run()` method when started.    |
+| `Thread(Runnable target, String name)` | Same as above but assigns a custom name.              |
+| `Thread(String name)`                  | Creates a named thread with no target.                |
+
+### Example
+
+```java
+Runnable task = () -> System.out.println(Thread.currentThread().getName() + " executing task.");
+Thread t = new Thread(task, "Worker-1");
 t.start();
 ```
 
-Output:
-
-```
-Started with interrupt flag = true
-```
-
-📘 Threads **inherit interrupt status** even before start if interrupted early.
+💡 **Best Practice:** Always assign meaningful thread names to simplify debugging and log tracing.
 
 ---
 
-### 🧩 Example — When Interruption Is Ignored
+## 6. Important Static Methods
+
+The `Thread` class provides several static utility methods to manage thread behavior globally.
+
+| Method               | Description                                                    |
+| -------------------- | -------------------------------------------------------------- |
+| `currentThread()`    | Returns a reference to the currently executing thread.         |
+| `sleep(long millis)` | Temporarily pauses execution for the specified time.           |
+| `yield()`            | Hints the scheduler to give other threads a chance to execute. |
+| `onSpinWait()`       | Optimized CPU spin-wait hint introduced in Java 9.             |
+
+### Example
 
 ```java
-Thread t = new Thread(() -> {
-    while (true) System.out.println("Still running...");
-});
-t.start();
-t.interrupt(); // sets flag only, thread keeps running
+for (int i = 0; i < 3; i++) {
+    System.out.println(Thread.currentThread().getName() + " - tick " + i);
+    Thread.sleep(500); // Pause for 0.5 seconds
+}
 ```
 
-🧠 Because the thread **never checks** `isInterrupted()`, it **never exits**.
+⚙️ **Compiler Note:** `sleep()` doesn’t release locks; it only pauses the current thread.
 
 ---
 
-### 🧩 Example — When `Thread.interrupted()` Resets Flag
+## 7. The Interrupt Mechanism
+
+Thread interruption is a cooperative mechanism to stop or signal a running thread. It doesn’t forcibly terminate a thread — instead, it sets an internal flag that the thread can check.
+
+### Example
 
 ```java
-Thread.currentThread().interrupt();
-System.out.println(Thread.interrupted()); // true
-System.out.println(Thread.interrupted()); // false (cleared)
+class InterruptDemo {
+    public static void main(String[] args) throws InterruptedException {
+        Thread worker = new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+                System.out.println("Working...");
+            }
+            System.out.println("Stopped safely.");
+        });
+
+        worker.start();
+        Thread.sleep(1000);
+        worker.interrupt(); // Request stop
+    }
+}
 ```
+
+💡 **Key Concept:** The `interrupt()` method sets the interrupt flag. Methods like `sleep()` or `wait()` respond by throwing `InterruptedException` and clearing the flag.
+
+### Distinguishing `interrupt()` vs `interrupted()`
+
+| Method          | Type            | Effect                                                          |
+| --------------- | --------------- | --------------------------------------------------------------- |
+| `interrupt()`   | Instance method | Sets the interrupt flag of the target thread.                   |
+| `interrupted()` | Static method   | Checks and **clears** the interrupt flag of the current thread. |
+
+⚠️ **Edge Case:** Calling `interrupt()` on another thread doesn’t guarantee immediate termination — the target thread must cooperatively check its status.
 
 ---
 
-## 🔟 Thread Lifecycle Methods Summary
+## 8. Edge Cases and Internal Behavior
 
-| Method      | Type     | Description                          |
-| ----------- | -------- | ------------------------------------ |
-| `start()`   | Instance | Launches thread.                     |
-| `run()`     | Instance | Actual execution logic.              |
-| `join()`    | Instance | Waits for a thread to finish.        |
-| `sleep(ms)` | Static   | Pauses current thread.               |
-| `yield()`   | Static   | Hint to scheduler to switch threads. |
-| `isAlive()` | Instance | Checks if thread still running.      |
+- **Calling `start()` twice:** Throws `IllegalThreadStateException` — a thread can only start once.
+- **Thread safety:** Multiple threads writing shared data without synchronization can lead to race conditions.
+- **Memory visibility:** Without synchronization, changes made by one thread may not be visible to another.
+- **Finalization:** Once a thread terminates, it cannot be restarted.
+
+⚙️ **Compiler Behavior Insight:** The JVM uses a combination of native and managed calls for thread scheduling. Thread objects remain in memory until garbage collected, even after termination.

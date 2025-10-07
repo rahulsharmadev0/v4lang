@@ -1,0 +1,169 @@
+---
+sidebar_position: 3
+title: Monitor Lock
+slug: monitor-lock
+---
+# Java Threads & Monitor Locks 
+
+# 🔒 Monitor Lock (Intrinsic Lock) — Deep Dive
+
+## What is a Monitor Lock?
+
+A **monitor lock** (intrinsic lock) is the JVM mechanism that enforces mutual exclusion for `synchronized` blocks and methods. Conceptually:
+
+* Every reference-type object has one monitor lock.
+* When a thread enters `synchronized(obj) { ... }` it must first **acquire** `obj`’s monitor.
+* Only the owning thread can execute the guarded code; others are blocked until the lock is released.
+
+💡 *Analogy:* think of each object as a room with one key. A thread must hold the key to enter the room.
+
+---
+
+## Why Monitor Locks Exist
+
+To prevent race conditions and ensure **atomicity** and **visibility** for critical sections that access shared mutable state.
+
+Example problem (race condition):
+
+```java
+class Counter {
+    int count = 0;
+    void increment() {
+        count++; // read-modify-write is not atomic
+    }
+}
+```
+
+If two threads call `increment()` concurrently, both may read the same value and write one increment — losing one update. Synchronizing prevents this:
+
+```java
+class SafeCounter {
+    private int count = 0;
+    synchronized void increment() {
+        count++;
+    }
+    synchronized int get() { return count; }
+}
+```
+
+With `synchronized`, the monitor guarantees **mutual exclusion** and establishes the necessary **happens-before** relationships for visibility.
+
+---
+
+## Where the Lock Lives (Object Header & Mark Word)
+
+Every object has an object header. On HotSpot JVMs, the header contains a **Mark Word** that stores metadata such as:
+
+* Lock state and lock-related flags
+* Thread id or pointer to lock records (for biased/lightweight locks)
+* Identity hashcode (when computed)
+* GC age bits
+
+The **Mark Word** is reused to store lock information. Depending on contention and optimization, the Mark Word's bits encode different lock states.
+
+> **Important:** The exact details and bit layout are JVM implementation specifics (HotSpot) and can change across JVM versions; code should not rely on fixed bit positions. The conceptual point: the monitor state is encoded in the object header, and the JVM uses it to manage lock ownership and transitions.
+
+---
+
+## Lock States & Transitions (HotSpot semantics — conceptual)
+
+HotSpot implements several lock states to optimize for the common case of uncontended synchronization:
+
+1. **Unlocked / No Lock** — object header stores normal Mark Word.
+2. **Biased Locking** — a thread may acquire the lock by biasing it to itself without atomic operations. Fastest for single-threaded access.
+3. **Lightweight (Thin) Lock** — uses lock records on the owning thread's stack and CAS on the Mark Word for fast uncontended locking.
+4. **Inflated (Heavyweight) Monitor** — under contention, the JVM inflates the lock to a monitor object (monitor = kernel-based or VM-managed structure) and blocks other threads (slow path).
+
+**Transition triggers:** contention, unlocking by a different thread, or explicit VM flags.
+
+💡 *Tip:* These optimizations target performance; they are invisible at the language level but affect performance characteristics (latency and throughput) of synchronized sections.
+
+---
+
+## `monitorenter` / `monitorexit` — Bytecode & Compiler Behaviour
+
+A `synchronized` block/method compiles to `monitorenter` at block entry and `monitorexit` at exits. The compiler emits code that ensures `monitorexit` executes even if the block throws.
+
+Example source:
+
+```java
+void example() {
+    synchronized (this) {
+        System.out.println("Hello");
+    }
+}
+```
+
+Simplified bytecode structure the compiler generates (conceptual):
+
+```
+aload_0            // push 'this'
+dup                // duplicate ref (for monitorexit)
+astore_1           // store one copy in local (for finally)
+monitorenter        // acquire monitor
+...                // body
+aload_1
+monitorexit         // release monitor
+goto L
+astore_2            // catch any Throwable
+aload_1
+monitorexit         // ensure release in exception path
+athrow              // rethrow
+L: return
+```
+
+**Why the duplication and local store?** Because `monitorexit` needs the same object reference on the stack. If an exception occurs inside the block, the catch/finally-like handler uses the stored reference to call `monitorexit` and then rethrows the exception — guaranteeing the lock release.
+
+⚙️ *Compiler guarantee:* The JVM ensures **monitorexit** runs for every successful `monitorenter`, preventing permanent lock ownership after an exception.
+
+---
+
+## `wait()` / `notify()` / `notifyAll()` — Interaction with Monitor
+
+These methods are defined on `Object` and are part of the monitor/condition mechanism — **not** the `Thread` class.
+
+Key rules:
+
+* Must call `wait()` / `notify()` / `notifyAll()` while holding the object's monitor (inside `synchronized` on that object); otherwise `IllegalMonitorStateException` is thrown.
+* `wait()` behavior: the current thread **releases** the monitor and joins the object's *wait set*.
+* `notify()` awakens one waiting thread; `notifyAll()` awakens all waiting threads.
+* A thread awakened from `wait()` moves to the monitor's entry/waiting queue and must reacquire the monitor before proceeding.
+
+### Expanded Example: Simple Producer-Consumer (single-slot)
+
+```java
+class Drop {
+    private Integer item = null; // null means empty
+
+    public synchronized void put(int value) throws InterruptedException {
+        while (item != null) {
+            wait(); // release lock and wait until empty
+        }
+        item = value;
+        notifyAll(); // signal consumers
+    }
+
+    public synchronized int take() throws InterruptedException {
+        while (item == null) {
+            wait(); // release lock and wait until an item is available
+        }
+        int val = item;
+        item = null;
+        notifyAll(); // signal producers
+        return val;
+    }
+}
+```
+
+Flow explanation:
+
+1. Producer calls `put()` and acquires the monitor.
+2. If the slot is occupied, it `wait()`s (releases lock) until notified.
+3. Consumer `take()` acquires the monitor, reads the item, sets slot empty, and `notifyAll()`.
+4. Waiting producer wakes, reacquires monitor, stores value, and `notifyAll()` notifies consumer(s).
+
+**Notes & Pitfalls:**
+
+* Always use loops (`while`) around `wait()` to guard against spurious wakeups.
+* Prefer `notifyAll()` over `notify()` unless you can reason about which waiting thread should proceed.
+* `wait(long timeout)` moves the thread to timed-wait state and will wake after timeout or notify.
