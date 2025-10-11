@@ -1,8 +1,9 @@
 ---
 sidebar_position: 3
-title: Executors & Thread Pools 
+title: Executors & Thread Pools
 slug: executors-and-thread-pools
 ---
+
 Core Concepts: Executors & Thread Pools
 Start here to understand how tasks are executed concurrently (concept → class → examples).
 
@@ -12,18 +13,18 @@ Start here to understand how tasks are executed concurrently (concept → class 
 
 Creating raw `Thread` instances for every asynchronous task is simple but brittle at scale:
 
-* Thread creation/destruction is expensive (memory + sched cost).
-* Unbounded thread creation can exhaust system resources (OOM, CPU thrash).
-* Mixing *task* logic with *thread* lifecycle makes code harder to reason about.
-* You often want:
+- Thread creation/destruction is expensive (memory + sched cost).
+- Unbounded thread creation can exhaust system resources (OOM, CPU thrash).
+- Mixing _task_ logic with _thread_ lifecycle makes code harder to reason about.
+- You often want:
 
-  * **Bounded concurrency** (limit threads),
-  * **Task queuing** (buffer bursts),
-  * **Lifecycle control** (shutdown, await termination),
-  * **Instrumentation** (activeCount, completedTaskCount),
-  * **Rejection handling** when load exceeds capacity.
+  - **Bounded concurrency** (limit threads),
+  - **Task queuing** (buffer bursts),
+  - **Lifecycle control** (shutdown, await termination),
+  - **Instrumentation** (activeCount, completedTaskCount),
+  - **Rejection handling** when load exceeds capacity.
 
-Executors abstract thread management from *what* is run. They let you *submit work* and control *how* it executes (pool sizing, queueing, scheduling, rejection). Java’s tutorial and API present executors as the recommended abstraction for larger applications.
+Executors abstract thread management from _what_ is run. They let you _submit work_ and control _how_ it executes (pool sizing, queueing, scheduling, rejection). Java’s tutorial and API present executors as the recommended abstraction for larger applications.
 
 ---
 
@@ -40,16 +41,16 @@ Think of a `ThreadPoolExecutor` as a tiny runtime that coordinates:
 
 Standard behavior (common configuration):
 
-* If `poolSize < corePoolSize` ⇒ create a new thread to run the task.
-* Else if `workQueue` has capacity ⇒ enqueue the task.
-* Else if `poolSize < maximumPoolSize` ⇒ create new thread.
-* Else ⇒ apply the `RejectedExecutionHandler`.
+- If `poolSize < corePoolSize` ⇒ create a new thread to run the task.
+- Else if `workQueue` has capacity ⇒ enqueue the task.
+- Else if `poolSize < maximumPoolSize` ⇒ create new thread.
+- Else ⇒ apply the `RejectedExecutionHandler`.
 
-**Important**: the *queue type* changes behavior radically:
+**Important**: the _queue type_ changes behavior radically:
 
-* **Unbounded queue** (e.g., `LinkedBlockingQueue` without cap) → tasks queue up; pool never grows beyond core size. This avoids rejecting tasks but can OOM.
-* **Bounded queue** (e.g., `ArrayBlockingQueue`) → pool can grow to `maximumPoolSize` under bursts; then rejects.
-* **SynchronousQueue** (used by cached thread pools) → handoff queue: no queuing; creates new thread for each submission (up to max), otherwise reject.
+- **Unbounded queue** (e.g., `LinkedBlockingQueue` without cap) → tasks queue up; pool never grows beyond core size. This avoids rejecting tasks but can OOM.
+- **Bounded queue** (e.g., `ArrayBlockingQueue`) → pool can grow to `maximumPoolSize` under bursts; then rejects.
+- **SynchronousQueue** (used by cached thread pools) → handoff queue: no queuing; creates new thread for each submission (up to max), otherwise reject.
 
 See official Java API for precise semantics.
 
@@ -61,21 +62,21 @@ See official Java API for precise semantics.
 
 **ExecutorService (concept):**
 
-* Adds lifecycle control: `shutdown()`, `shutdownNow()`, `awaitTermination(...)`.
-* Produces `Future` results via `submit(Callable/ Runnable)`.
-* Provides bulk operations: `invokeAll`, `invokeAny`.
+- Adds lifecycle control: `shutdown()`, `shutdownNow()`, `awaitTermination(...)`.
+- Produces `Future` results via `submit(Callable/ Runnable)`.
+- Provides bulk operations: `invokeAll`, `invokeAny`.
 
 **ThreadPoolExecutor (class):**
 
-* Fully configurable thread-pool implementation. Use it when you need control over sizing, queue, rejection, and instrumentation.
+- Fully configurable thread-pool implementation. Use it when you need control over sizing, queue, rejection, and instrumentation.
 
 **ScheduledThreadPoolExecutor (concept & class):**
 
-* Schedules tasks for future execution or periodically (preferred over `Timer` for multi-threaded requirements). API: `schedule`, `scheduleAtFixedRate`, `scheduleWithFixedDelay`.
+- Schedules tasks for future execution or periodically (preferred over `Timer` for multi-threaded requirements). API: `schedule`, `scheduleAtFixedRate`, `scheduleWithFixedDelay`.
 
 **Executors (factory methods):**
 
-* Convenience factory methods: `newFixedThreadPool`, `newCachedThreadPool`, `newSingleThreadExecutor`, `newScheduledThreadPool`, etc. Useful for quick setups but be aware of their default queue choices and implications.
+- Convenience factory methods: `newFixedThreadPool`, `newCachedThreadPool`, `newSingleThreadExecutor`, `newScheduledThreadPool`, etc. Useful for quick setups but be aware of their default queue choices and implications.
 
 ---
 
@@ -83,9 +84,9 @@ See official Java API for precise semantics.
 
 > Notes for examples below:
 >
-> * No package declarations (core Java).
-> * Each example is self-contained; print statements show thread names & task ids to make behavior observable.
-> * Expect to run them in your IDE / terminal.
+> - No package declarations (core Java).
+> - Each example is self-contained; print statements show thread names & task ids to make behavior observable.
+> - Expect to run them in your IDE / terminal.
 
 ### 4.1 — Simple fixed thread pool + graceful shutdown
 
@@ -115,8 +116,8 @@ public class FixedPoolExample {
 
 What to observe:
 
-* 3 threads execute tasks concurrently; others queue.
-* `shutdown()` initiates graceful shutdown; `awaitTermination` waits. Use `shutdownNow()` if you need forced termination.
+- 3 threads execute tasks concurrently; others queue.
+- `shutdown()` initiates graceful shutdown; `awaitTermination` waits. Use `shutdownNow()` if you need forced termination.
 
 ---
 
@@ -145,7 +146,7 @@ public class CallableFutureExample {
 
 Key points:
 
-* `submit(Callable)` returns `Future<V>`: use `get()` (blocking) or `isDone()` / `cancel()` to manage.
+- `submit(Callable)` returns `Future<V>`: use `get()` (blocking) or `isDone()` / `cancel()` to manage.
 
 ---
 
@@ -190,7 +191,7 @@ public class DirectThreadPoolExample {
 
 Why do this?
 
-* Explicit `ThreadPoolExecutor` gives control: bounded `ArrayBlockingQueue` prevents uncontrolled growth; `CallerRunsPolicy` prevents silent drops under overload. Monitor with `getActiveCount()`/`getPoolSize()`/`getQueue().size()`.
+- Explicit `ThreadPoolExecutor` gives control: bounded `ArrayBlockingQueue` prevents uncontrolled growth; `CallerRunsPolicy` prevents silent drops under overload. Monitor with `getActiveCount()`/`getPoolSize()`/`getQueue().size()`.
 
 ---
 
@@ -202,32 +203,32 @@ Below are the standard policies (all are inner classes of `ThreadPoolExecutor`) 
 
 ### 5.1 — `AbortPolicy` (default)
 
-* **Behavior:** throws `RejectedExecutionException`. Caller sees the failure.
-* **When:** good if you want failures surfaced immediately so upstream can back off or fail fast.
-* **Example idea:** run with `new ThreadPoolExecutor.CallerRunsPolicy()` replaced by `new ThreadPoolExecutor.AbortPolicy()` and catch `RejectedExecutionException` around `execute()` / `submit()`.
+- **Behavior:** throws `RejectedExecutionException`. Caller sees the failure.
+- **When:** good if you want failures surfaced immediately so upstream can back off or fail fast.
+- **Example idea:** run with `new ThreadPoolExecutor.CallerRunsPolicy()` replaced by `new ThreadPoolExecutor.AbortPolicy()` and catch `RejectedExecutionException` around `execute()` / `submit()`.
 
 Official doc: Rejected tasks throw `RejectedExecutionException`.
 
 ### 5.2 — `CallerRunsPolicy`
 
-* **Behavior:** the submitting thread runs the task directly (synchronous fallback), unless executor is shut down.
-* **Pros:** simple back-pressure — slows submitters under high load.
-* **Cons:** if submitter is a UI/event thread or another critical thread, it may block responsiveness.
-* **Doc:** `CallerRunsPolicy` description.
+- **Behavior:** the submitting thread runs the task directly (synchronous fallback), unless executor is shut down.
+- **Pros:** simple back-pressure — slows submitters under high load.
+- **Cons:** if submitter is a UI/event thread or another critical thread, it may block responsiveness.
+- **Doc:** `CallerRunsPolicy` description.
 
 **Mini-demo expectation:** If many tasks submitted quickly, some tasks print from `main` thread — see thread name — indicating fallback execution.
 
 ### 5.3 — `DiscardPolicy`
 
-* **Behavior:** silently drops the rejected task.
-* **When:** you don’t care about old/extra work (e.g., telemetry where losing events is acceptable).
-* **Risk:** silent loss — no exceptions; be careful.
+- **Behavior:** silently drops the rejected task.
+- **When:** you don’t care about old/extra work (e.g., telemetry where losing events is acceptable).
+- **Risk:** silent loss — no exceptions; be careful.
 
 ### 5.4 — `DiscardOldestPolicy`
 
-* **Behavior:** drops the oldest queued task, then retries `execute()` (which may succeed if queue slot freed).
-* **When:** you prefer newer submissions and are willing to drop "stale" queued tasks.
-* **Doc:** behavior: discard oldest and retry unless executor is shut down.
+- **Behavior:** drops the oldest queued task, then retries `execute()` (which may succeed if queue slot freed).
+- **When:** you prefer newer submissions and are willing to drop "stale" queued tasks.
+- **Doc:** behavior: discard oldest and retry unless executor is shut down.
 
 ---
 
@@ -235,9 +236,9 @@ Official doc: Rejected tasks throw `RejectedExecutionException`.
 
 `ScheduledThreadPoolExecutor` supports:
 
-* `schedule(Runnable/Callable, delay, unit)`
-* `scheduleAtFixedRate(Runnable, initialDelay, period, unit)` — tries to maintain fixed rate: next start = previous start + period. If a run takes longer than period, it may run immediately after previous completes (no overlapping by same pool thread, but scheduler attempts to keep to rate).
-* `scheduleWithFixedDelay(Runnable, initialDelay, delay, unit)` — next start = previous completion + delay.
+- `schedule(Runnable/Callable, delay, unit)`
+- `scheduleAtFixedRate(Runnable, initialDelay, period, unit)` — tries to maintain fixed rate: next start = previous start + period. If a run takes longer than period, it may run immediately after previous completes (no overlapping by same pool thread, but scheduler attempts to keep to rate).
+- `scheduleWithFixedDelay(Runnable, initialDelay, delay, unit)` — next start = previous completion + delay.
 
 Prefer `ScheduledThreadPoolExecutor` over `Timer` for multiple threads and robustness. Example:
 
@@ -269,39 +270,37 @@ Watch the timing: if job sleep > period, `scheduleAtFixedRate` tries to compensa
 
 # 7 — Best practices & patterns (practical guidance)
 
-* **Prefer explicit `ThreadPoolExecutor` when you need production tuning** (bounded queues, named threads, metrics, controlled rejection). `Executors` factory methods are convenient but hide choices (e.g., `newFixedThreadPool` uses an unbounded queue).
-* **Use bounded queues** for services facing untrusted input (protect memory).
-* **Choose rejection policy intentionally**:
+- **Prefer explicit `ThreadPoolExecutor` when you need production tuning** (bounded queues, named threads, metrics, controlled rejection). `Executors` factory methods are convenient but hide choices (e.g., `newFixedThreadPool` uses an unbounded queue).
+- **Use bounded queues** for services facing untrusted input (protect memory).
+- **Choose rejection policy intentionally**:
 
-  * `AbortPolicy` for fail-fast,
-  * `CallerRunsPolicy` for simple back-pressure,
-  * `Discard*` for lossy workloads.
-* **Set thread names with `ThreadFactory`** for easier debugging/metrics.
-* **Avoid executing blocking operations on scheduler threads** (Scheduled pool should be sized appropriately).
-* **Graceful shutdown**: call `shutdown()`, await termination with a timeout, then `shutdownNow()` if needed. Clean up resources in tasks when interrupted.
-* **Monitor**: `getActiveCount`, `getPoolSize`, `getQueue().size`, `getCompletedTaskCount`.
-* **Do not leak Executors**: if you create one per request, ensure you shut it down; prefer shared pools.
+  - `AbortPolicy` for fail-fast,
+  - `CallerRunsPolicy` for simple back-pressure,
+  - `Discard*` for lossy workloads.
+
+- **Set thread names with `ThreadFactory`** for easier debugging/metrics.
+- **Avoid executing blocking operations on scheduler threads** (Scheduled pool should be sized appropriately).
+- **Graceful shutdown**: call `shutdown()`, await termination with a timeout, then `shutdownNow()` if needed. Clean up resources in tasks when interrupted.
+- **Monitor**: `getActiveCount`, `getPoolSize`, `getQueue().size`, `getCompletedTaskCount`.
+- **Do not leak Executors**: if you create one per request, ensure you shut it down; prefer shared pools.
 
 ---
 
 # 8 — Summary quick reference
 
-* `Executor` — low-level `execute(Runnable)`.
-* `ExecutorService` — lifecycle & `Future`-producing methods (`submit`, `shutdown`, `awaitTermination`).
-* `Executors` — factory methods (quick but opinionated defaults).
-* `ThreadPoolExecutor` — full-featured pool with `corePoolSize`, `maximumPoolSize`, `workQueue`, `keepAliveTime`, `RejectedExecutionHandler`.
-* `ScheduledThreadPoolExecutor` — scheduling API, preferred over `Timer`.
+- `Executor` — low-level `execute(Runnable)`.
+- `ExecutorService` — lifecycle & `Future`-producing methods (`submit`, `shutdown`, `awaitTermination`).
+- `Executors` — factory methods (quick but opinionated defaults).
+- `ThreadPoolExecutor` — full-featured pool with `corePoolSize`, `maximumPoolSize`, `workQueue`, `keepAliveTime`, `RejectedExecutionHandler`.
+- `ScheduledThreadPoolExecutor` — scheduling API, preferred over `Timer`.
 
 ---
 
 # 9 — References (official Java docs & tutorial)
 
-* ExecutorService (API).
-* ThreadPoolExecutor (API).
-* ScheduledThreadPoolExecutor (API).
-* Executors (factories) API.
-* RejectedExecutionHandler (API & policy classes).
-* Java Concurrency tutorial — Executors & Thread Pools.
-
-
-
+- ExecutorService (API).
+- ThreadPoolExecutor (API).
+- ScheduledThreadPoolExecutor (API).
+- Executors (factories) API.
+- RejectedExecutionHandler (API & policy classes).
+- Java Concurrency tutorial — Executors & Thread Pools.

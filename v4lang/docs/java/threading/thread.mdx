@@ -20,7 +20,7 @@ Every thread in Java is an independent path of execution within a process. A pro
 - Threads share memory but maintain independent call stacks.
 - Thread scheduling and execution order are managed by the **JVM and OS scheduler**, not the developer.
 
-#### Example
+##### Example
 
 ```java
 class Worker extends Thread {
@@ -53,7 +53,7 @@ A thread’s lifecycle is managed internally by the JVM. The states are defined 
 | **TIMED_WAITING** | Thread is waiting for a specific time (e.g., `sleep(1000)`).                 |
 | **TERMINATED**    | Thread has completed execution or exited due to an exception.                |
 
-#### Example: Visualizing Lifecycle
+##### Example: Visualizing Lifecycle
 
 ```java
 Thread t = new Thread(() -> System.out.println("Running"));
@@ -76,7 +76,7 @@ Thread priorities influence the scheduler’s choice of which thread to run firs
 | `NORM_PRIORITY` | 5     | Default priority |
 | `MAX_PRIORITY`  | 10    | Highest priority |
 
-#### Example
+##### Example
 
 ```java
 Thread t1 = new Thread(() -> System.out.println("Low priority"));
@@ -104,7 +104,7 @@ Threads can be constructed in several ways depending on the execution target and
 | `Thread(Runnable target, String name)` | Same as above but assigns a custom name.              |
 | `Thread(String name)`                  | Creates a named thread with no target.                |
 
-#### Example
+##### Example
 
 ```java
 Runnable task = () -> System.out.println(Thread.currentThread().getName() + " executing task.");
@@ -127,7 +127,7 @@ The `Thread` class provides several static utility methods to manage thread beha
 | `yield()`            | Hints the scheduler to give other threads a chance to execute. |
 | `onSpinWait()`       | Optimized CPU spin-wait hint introduced in Java 9.             |
 
-#### Example
+##### Example
 
 ```java
 for (int i = 0; i < 3; i++) {
@@ -142,7 +142,7 @@ for (int i = 0; i < 3; i++) {
 
 Thread interruption is a cooperative mechanism to stop or signal a running thread. It doesn’t forcibly terminate a thread — instead, it sets an internal flag that the thread can check.
 
-#### Example
+##### Example
 
 ```java
 class InterruptDemo {

@@ -13,7 +13,7 @@ A **closure** is a function that **remembers the variables from its outer scope*
 2. The **inner function retains access** to the outer function's variables.
 3. The outer function’s execution may complete, but the inner function still remembers and can access its variables.
 
-### Example 1: Basic Closure
+#### Example 1: Basic Closure
 
 ```javascript
 function outerFunction() {
@@ -36,7 +36,7 @@ Even though `outerFunction()` has finished executing, `myClosure()` still has ac
 
 ---
 
-### Example 2: Closure with Private Variables (Data Encapsulation)
+#### Example 2: Closure with Private Variables (Data Encapsulation)
 
 Closures are useful for **hiding variables** from the global scope.
 
@@ -64,7 +64,7 @@ increment(); // Output: 3
 
 ---
 
-### Example 3: Closures in Loops (Fixing the `var` Issue)
+#### Example 3: Closures in Loops (Fixing the `var` Issue)
 
 ```javascript
 for (var i = 1; i <= 3; i++) {

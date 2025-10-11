@@ -148,7 +148,7 @@ Generics are implemented via **type erasure**: the compiler enforces type safety
 - Generic type parameters are not available via `instanceof` or reflection in the usual way.
 - The compiler may insert **bridge methods** to preserve polymorphism when generics and legacy code mix.
 
-### Example — erasure and casting inserted by compiler
+#### Example — erasure and casting inserted by compiler
 
 ```java
 List<String> list = new ArrayList<>();
@@ -396,7 +396,7 @@ This allows using methods from both `ClassA` and `InterfaceB` inside `m`.
 - Use type parameters (`<T>`) when the method or class needs to **relate** two or more types or return the same type used in arguments.
 - Use wildcards when you only need **flexible input** or **flexible output** and don't need to express relationships.
 
-### Example: a generic cache API
+#### Example: a generic cache API
 
 ```java
 public interface Cache<K, V> {
@@ -438,7 +438,7 @@ The Streams API makes heavy use of generics with bounded wildcards and functiona
 
 ## Appendix — Expanded Examples
 
-### Example: Comparator with generics
+#### Example: Comparator with generics
 
 ```java
 public class ReversedComparator<T> implements Comparator<T> {
@@ -456,7 +456,7 @@ Comparator<Number> c = (a, b) -> Double.compare(a.doubleValue(), b.doubleValue()
 Comparator<Integer> rev = new ReversedComparator<>(c); // works because of ? super T
 ```
 
-### Example: Generic Factory with Class tokens
+#### Example: Generic Factory with Class tokens
 
 Because `T` is erased you sometimes accept a `Class<T>` token:
 
